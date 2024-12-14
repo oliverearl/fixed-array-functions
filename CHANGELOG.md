@@ -2,6 +2,19 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v1.2.6 - 2024-12-14
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/15
+* Bump dependabot/fetch-metadata from 1.5.1 to 1.6.0 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/16
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/17
+* Bump ramsey/composer-install from 2 to 3 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/20
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.2.0 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/19
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/18
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v.1.2.5...v1.2.6
+
 ## v1.2.5 - 2023-04-28
 
 ### What's Changed
