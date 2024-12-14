@@ -2,30 +2,22 @@
 
 namespace Petrobolos\FixedArray\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Petrobolos\FixedArray\FixedArrayFunctionsServiceProvider;
 
 class TestCase extends Orchestra
 {
-    protected function setUp(): void
+    /** @inheritDoc */
+    public function getEnvironmentSetUp($app): void
     {
-        parent::setUp();
-
-        Factory::guessFactoryNamesUsing(
-            static fn (string $modelName) => 'Petrobolos\\FixedArrayFunctions\\Database\\Factories\\' . class_basename($modelName).'Factory'
-        );
+        config()->set('database.default', 'testing');
     }
 
+    /** @inheritDoc */
     protected function getPackageProviders($app): array
     {
         return [
             FixedArrayFunctionsServiceProvider::class,
         ];
-    }
-
-    public function getEnvironmentSetUp($app): void
-    {
-        config()->set('database.default', 'testing');
     }
 }

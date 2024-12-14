@@ -11,25 +11,16 @@ use SplFixedArray;
  * FixedArrayable class.
  *
  * Provides a fluent interface for working with fixed arrays.
- *
- * @copyright Copyright (C) 2022 Petrobolos Games
- * @license MIT
- * @package Petrobolos\FixedArray
  */
 final class FixedArrayable implements JsonSerializable
 {
     /**
      * The underlying array value.
-     *
-     * @var \SplFixedArray
      */
-    protected SplFixedArray $value;
+    protected readonly SplFixedArray $value;
 
     /**
      * Create a new fixed array fluent interface.
-     *
-     * @param mixed|null $input
-     * @return void
      */
     public function __construct(mixed $input = null)
     {
@@ -44,10 +35,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Alias for push.
-     *
-     * @see \Petrobolos\FixedArray\FixedArrayable::push()
-     * @param mixed $input
-     * @return $this
      */
     public function add(mixed $input): self
     {
@@ -56,10 +43,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Adds values from a given array or array-like object into the current fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::addFrom()
-     * @param \ArrayAccess|array $input
-     * @return $this
      */
     public function addFrom(ArrayAccess|array $input): self
     {
@@ -68,11 +51,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Returns whether a given item is contained within the array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::contains()
-     * @param mixed $item
-     * @param bool $useStrict
-     * @return bool
      */
     public function contains(mixed $item, bool $useStrict = false): bool
     {
@@ -81,9 +59,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Return the number of elements in the fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::count()
-     * @return int
      */
     public function count(): int
     {
@@ -92,10 +67,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Create a new fixed array fluent interface.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::create()
-     * @param int $count
-     * @return $this
      */
     public function create(int $count = 5): self
     {
@@ -104,10 +75,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Apply a callback to each item in the array without modifying the original array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::each()
-     * @param callable $callback
-     * @return $this
      */
     public function each(callable $callback): self
     {
@@ -118,10 +85,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Apply a filter to the fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::filter()
-     * @param callable $callback
-     * @return $this
      */
     public function filter(callable $callback): self
     {
@@ -130,9 +93,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Returns the first element of the array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::first()
-     * @return mixed
      */
     public function first(): mixed
     {
@@ -141,21 +101,14 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Create a new fixed array fluent interface from a given input.
-     *
-     * @param mixed $input
-     * @return $this
      */
     public function from(mixed $input): self
     {
-        return new FixedArrayable($input);
+        return new self($input);
     }
 
     /**
      * Create a fixed array from a standard array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::fromArray()
-     * @param array $array
-     * @return $this
      */
     public function fromArray(array $array): self
     {
@@ -164,10 +117,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Create a fixed array from a collection.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::fromCollection()
-     * @param \Illuminate\Support\Collection $collection
-     * @return $this
      */
     public function fromCollection(Collection $collection): self
     {
@@ -176,8 +125,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Retrieve the underlying fixed array value.
-     *
-     * @return \SplFixedArray
      */
     public function get(): SplFixedArray
     {
@@ -186,9 +133,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Return the last element of the array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::last()
-     * @return mixed
      */
     public function last(): mixed
     {
@@ -197,10 +141,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Apply a callback to each item in the array and return it.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::map()
-     * @param string|callable $callback
-     * @return $this
      */
     public function map(string|callable $callback): self
     {
@@ -209,10 +149,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Merge the current fixed array with any number of iterable objects or arrays.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::merge()
-     * @param array|\SplFixedArray|\Illuminate\Support\Collection ...$inputs
-     * @return $this
      */
     public function merge(array|SplFixedArray|Collection ...$inputs): self
     {
@@ -221,9 +157,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Pop the last element off the fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::pop()
-     * @return mixed
      */
     public function pop(): mixed
     {
@@ -232,10 +165,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Push a value onto the fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::push()
-     * @param mixed $input
-     * @return $this
      */
     public function push(mixed $input): self
     {
@@ -244,10 +173,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Resizes the fixed array to the given number of indices.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::resize()
-     * @param int $indices
-     * @return $this
      */
     public function resize(int $indices): self
     {
@@ -258,9 +183,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Returns the second value in the fixed array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::second()
-     * @return mixed
      */
     public function second(): mixed
     {
@@ -269,9 +191,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Convert the fixed array into a standard PHP array.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::toArray()
-     * @return array
      */
     public function toArray(): array
     {
@@ -280,9 +199,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Convert the fixed array to a collection.
-     *
-     * @see \Petrobolos\FixedArray\FixedArray::toCollection()
-     * @return \Illuminate\Support\Collection
      */
     public function toCollection(): Collection
     {
@@ -291,8 +207,6 @@ final class FixedArrayable implements JsonSerializable
 
     /**
      * Get the JSON representation of the arrayable object.
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {

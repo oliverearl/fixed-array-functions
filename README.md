@@ -14,8 +14,7 @@ large sets of data.
 
 ## Requirements
 
-Currently, requires PHP 8 or above, but work to backport support for 7.4 is in progress. This package is designed
-for Laravel 8 and 9, but might play nicely with older versions, or with Lumen. Let us know.
+Currently, requires PHP 8.3 or above, and Laravel 11+.
 
 ## Installation
 
@@ -109,9 +108,6 @@ $everything = FixedArray::merge(
 | setSize        | Resizes the array to a given size.                                          |                             `FixedArray::setSize(10, $array)` |
 | toArray        | Converts a fixed array into a standard array.                               |                                 `FixedArray::toArray($array)` |
 | toCollection   | Converts a fixed array into an Illuminate collection.                       |                            `FixedArray::toCollection($array)` |
-
-**NB:** Methods `current`, `key`, `next`, `rewind`, and `valid` are legacy alias operations for pointer-based array
-methods and simply return `null` currently. They will be implemented in a future version.
 
 ## Testing
 

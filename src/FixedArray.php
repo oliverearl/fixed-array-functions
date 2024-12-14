@@ -6,15 +6,6 @@ use ArrayAccess;
 use Illuminate\Support\Collection;
 use SplFixedArray;
 
-/**
- * FixedArray class.
- *
- * A collection of helper functions for making use of fixed arrays within Laravel.
- *
- * @copyright Copyright (C) 2022 Petrobolos Games
- * @license MIT
- * @package Petrobolos\FixedArray
- */
 class FixedArray
 {
     /**
@@ -47,11 +38,6 @@ class FixedArray
 
     /**
      * Returns whether a given item is contained within the array.
-     *
-     * @param mixed $item
-     * @param \SplFixedArray $array
-     * @param bool $useStrict
-     * @return bool
      */
     public static function contains(mixed $item, SplFixedArray $array, bool $useStrict = true): bool
     {
@@ -60,9 +46,6 @@ class FixedArray
 
     /**
      * Returns the size of the array.
-     *
-     * @param \SplFixedArray $array
-     * @return int
      */
     public static function count(SplFixedArray $array): int
     {
@@ -71,9 +54,6 @@ class FixedArray
 
     /**
      * Create a new fixed array.
-     *
-     * @param int $size
-     * @return \SplFixedArray
      */
     public static function create(int $size = 5): SplFixedArray
     {
@@ -81,27 +61,7 @@ class FixedArray
     }
 
     /**
-     * Return current array entry.
-     * Does nothing on PHP 8 or above.
-     *
-     * @param \SplFixedArray $array
-     * @return mixed
-     */
-    public static function current(SplFixedArray $array): mixed
-    {
-        if (self::noLegacyMethods()) {
-            return null;
-        }
-
-        return $array->current();
-    }
-
-    /**
      * Apply a callback to each item in the array without modifying the original array.
-     *
-     * @param \SplFixedArray $array
-     * @param callable $callback
-     * @return \SplFixedArray
      */
     public static function each(SplFixedArray $array, callable $callback): SplFixedArray
     {
@@ -114,10 +74,6 @@ class FixedArray
 
     /**
      * Apply a filter to a given fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @param callable $callback
-     * @return \SplFixedArray
      */
     public static function filter(SplFixedArray $array, callable $callback): SplFixedArray
     {
@@ -128,9 +84,6 @@ class FixedArray
 
     /**
      * Returns the first value from a fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @return mixed
      */
     public static function first(SplFixedArray $array): mixed
     {
@@ -139,10 +92,6 @@ class FixedArray
 
     /**
      * Import a PHP array into a fixed array.
-     *
-     * @param array $array
-     * @param bool $preserveKeys
-     * @return \SplFixedArray
      */
     public static function fromArray(array $array, bool $preserveKeys = true): SplFixedArray
     {
@@ -151,10 +100,6 @@ class FixedArray
 
     /**
      * Import a collection into a fixed array.
-     *
-     * @param \Illuminate\Support\Collection $collection
-     * @param bool $preserveKeys
-     * @return \SplFixedArray
      */
     public static function fromCollection(Collection $collection, bool $preserveKeys = true): SplFixedArray
     {
@@ -163,9 +108,6 @@ class FixedArray
 
     /**
      * Gets the size of the array.
-     *
-     * @param \SplFixedArray $array
-     * @return int
      */
     public static function getSize(SplFixedArray $array): int
     {
@@ -174,9 +116,6 @@ class FixedArray
 
     /**
      * Returns whether a given value is an SplFixedArray.
-     *
-     * @param mixed $array
-     * @return bool
      */
     public static function isFixedArray(mixed $array): bool
     {
@@ -184,26 +123,7 @@ class FixedArray
     }
 
     /**
-     * Return the current array index.
-     * Does nothing on PHP 8 or above.
-     *
-     * @param \SplFixedArray $array
-     * @return null|int
-     */
-    public static function key(SplFixedArray $array): ?int
-    {
-        if (self::noLegacyMethods()) {
-            return null;
-        }
-
-        return $array->key();
-    }
-
-    /**
      * Retrieves the last item from the array.
-     *
-     * @param \SplFixedArray $array
-     * @return mixed
      */
     public static function last(SplFixedArray $array): mixed
     {
@@ -212,10 +132,6 @@ class FixedArray
 
     /**
      * Apply a callback to each item in the array and return the new array.
-     *
-     * @param \SplFixedArray $array
-     * @param callable|string $callback
-     * @return \SplFixedArray
      */
     public static function map(SplFixedArray $array, callable|string $callback): SplFixedArray
     {
@@ -226,10 +142,6 @@ class FixedArray
 
     /**
      * Merges multiple fixed arrays, arrays, or collections into a single fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @param \SplFixedArray|array|\Illuminate\Support\Collection ...$arrays
-     * @return \SplFixedArray
      */
     public static function merge(SplFixedArray $array, SplFixedArray|array|Collection ...$arrays): SplFixedArray
     {
@@ -243,26 +155,7 @@ class FixedArray
     }
 
     /**
-     * Move the internal pointer to the next entry.
-     * Does nothing on PHP 8 or above.
-     *
-     * @param \SplFixedArray $array
-     * @return void
-     */
-    public static function next(SplFixedArray $array): void
-    {
-        if (self::noLegacyMethods()) {
-            return;
-        }
-
-        $array->next();
-    }
-
-    /**
      * Replaces the contents of a fixed array with nulls.
-     *
-     * @param \SplFixedArray $array
-     * @return void
      */
     public static function nullify(SplFixedArray $array): void
     {
@@ -273,10 +166,6 @@ class FixedArray
 
     /**
      * Return whether the specified index exists.
-     *
-     * @param int $index
-     * @param \SplFixedArray $array
-     * @return bool
      */
     public static function offsetExists(int $index, SplFixedArray $array): bool
     {
@@ -285,10 +174,6 @@ class FixedArray
 
     /**
      * Returns the value at the specified index.
-     *
-     * @param int $index
-     * @param \SplFixedArray $array
-     * @return mixed
      */
     public static function offsetGet(int $index, SplFixedArray $array): mixed
     {
@@ -297,10 +182,6 @@ class FixedArray
 
     /**
      * Set a given offset to a null value.
-     *
-     * @param int $index
-     * @param \SplFixedArray $array
-     * @return void
      */
     public static function offsetNull(int $index, SplFixedArray $array): void
     {
@@ -309,11 +190,6 @@ class FixedArray
 
     /**
      * Sets a new value at a specified index.
-     *
-     * @param int $index
-     * @param mixed $value
-     * @param \SplFixedArray $array
-     * @return void
      */
     public static function offsetSet(int $index, mixed $value, SplFixedArray $array): void
     {
@@ -322,9 +198,6 @@ class FixedArray
 
     /**
      * Pops the latest value from the array.
-     *
-     * @param \SplFixedArray $array
-     * @return mixed
      */
     public static function pop(SplFixedArray $array): mixed
     {
@@ -343,10 +216,6 @@ class FixedArray
     /**
      * Pushes a given value to the first available space on the array.
      * If the array is too small, the array size is extended by a single value.
-     *
-     * @param mixed $value
-     * @param \SplFixedArray $array
-     * @return \SplFixedArray
      */
     public static function push(mixed $value, SplFixedArray $array): SplFixedArray
     {
@@ -365,27 +234,7 @@ class FixedArray
     }
 
     /**
-     * Rewind iterator back to the start.
-     * Does nothing on PHP 8 or above.
-     *
-     * @param \SplFixedArray $array
-     * @return void
-     */
-    public static function rewind(SplFixedArray $array): void
-    {
-        if (self::noLegacyMethods()) {
-            return;
-        }
-
-        $array->rewind();
-    }
-
-    /**
      * Alias for setSize.
-     *
-     * @param int $size
-     * @param \SplFixedArray $array
-     * @return bool
      */
     public static function resize(int $size, SplFixedArray $array): bool
     {
@@ -394,9 +243,6 @@ class FixedArray
 
     /**
      * Returns the second value from a fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @return mixed
      */
     public static function second(SplFixedArray $array): mixed
     {
@@ -409,10 +255,6 @@ class FixedArray
 
     /**
      * Change the size of an array.
-     *
-     * @param int $size
-     * @param \SplFixedArray $array
-     * @return bool
      */
     public static function setSize(int $size, SplFixedArray $array): bool
     {
@@ -421,9 +263,6 @@ class FixedArray
 
     /**
      * Returns a PHP array from the fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @return array
      */
     public static function toArray(SplFixedArray $array): array
     {
@@ -432,38 +271,9 @@ class FixedArray
 
     /**
      * Returns a collection from the fixed array.
-     *
-     * @param \SplFixedArray $array
-     * @return \Illuminate\Support\Collection
      */
     public static function toCollection(SplFixedArray $array): Collection
     {
         return collect($array);
-    }
-
-    /**
-     * Check whether the array contains more elements.
-     * Does nothing on PHP 8 or above.
-     *
-     * @param \SplFixedArray $array
-     * @return null|bool
-     */
-    public static function valid(SplFixedArray $array): ?bool
-    {
-        if (self::noLegacyMethods()) {
-            return null;
-        }
-
-        return $array->valid();
-    }
-
-    /**
-     * Returns true if the current PHP version is 8.0 or above.
-     *
-     * @return bool
-     */
-    protected static function noLegacyMethods(): bool
-    {
-        return PHP_VERSION_ID >= 80000;
     }
 }

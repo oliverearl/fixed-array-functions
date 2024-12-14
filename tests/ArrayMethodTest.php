@@ -65,7 +65,7 @@ test('each applies a callback over each item without modifying the array', funct
 test('filter removes items from an array that pass a given test', function () {
     $values = FixedArray::fromArray([1, 2, 3, 4, 5]);
 
-    $filtered = FixedArray::filter($values, static fn (int $value) => $value % 2 === 0);
+    $filtered = FixedArray::filter($values, static fn(int $value) => $value % 2 === 0);
 
     /** @phpstan-ignore-next-line */
     $this->assertNotContains(1, $filtered);
@@ -120,7 +120,7 @@ test('last retrieves the last value from an array', function () {
 test('map applies a function to an array and returns it', function () {
     $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
 
-    $mappedArray = FixedArray::map($array, static fn (int $item) => $item * 2);
+    $mappedArray = FixedArray::map($array, static fn(int $item) => $item * 2);
 
     foreach ($mappedArray as $index => $item) {
         /** @phpstan-ignore-next-line */
