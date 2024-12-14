@@ -104,7 +104,7 @@ final class FixedArrayable implements JsonSerializable
      */
     public function from(mixed $input): self
     {
-        return new FixedArrayable($input);
+        return new self($input);
     }
 
     /**
