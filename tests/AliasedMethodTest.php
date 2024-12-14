@@ -2,28 +2,12 @@
 
 use Petrobolos\FixedArray\FixedArray;
 
-const LEGACY_SKIP_MSG = 'This is a legacy method that does nothing on PHP 8 or above.';
-
 test('count provides the size of the fixed array', function () {
     $count = 5;
     $array = new SplFixedArray($count);
 
     /** @phpstan-ignore-next-line */
     $this->assertEquals($count, FixedArray::count($array));
-});
-
-test('current returns the current array entry', function () {
-    if (PHP_VERSION_ID >= 80000) {
-        /** @phpstan-ignore-next-line */
-        $this->markTestSkipped(LEGACY_SKIP_MSG);
-    }
-
-    $test = 'test';
-    $array = new SplFixedArray(1);
-    $array[0] = 'test';
-
-    /** @phpstan-ignore-next-line */
-    $this->assertEquals($test, FixedArray::current($array));
 });
 
 test('from array creates a fixed array from a regular array', function () {
@@ -44,31 +28,6 @@ test('get size returns the size of the array', function () {
 
     /** @phpstan-ignore-next-line */
     $this->assertEquals($count, FixedArray::getSize($array));
-});
-
-test('key returns the current array index', function () {
-    if (PHP_VERSION_ID >= 80000) {
-        /** @phpstan-ignore-next-line */
-        $this->markTestSkipped(LEGACY_SKIP_MSG);
-    }
-
-    $array = new SplFixedArray(5);
-
-    /** @phpstan-ignore-next-line */
-    $this->assertEquals(0, FixedArray::key($array));
-});
-
-test('next advances the internal pointer', function () {
-    if (PHP_VERSION_ID >= 80000) {
-        /** @phpstan-ignore-next-line */
-        $this->markTestSkipped(LEGACY_SKIP_MSG);
-    }
-
-    $array = new SplFixedArray(5);
-    FixedArray::next($array);
-
-    /** @phpstan-ignore-next-line */
-    $this->assertSame(1, FixedArray::key($array));
 });
 
 test('offset exists returns whether a given index is occupied', function () {
@@ -104,20 +63,6 @@ test('offset set pushes a given value to a chosen index', function () {
     $this->assertSame($test, FixedArray::offsetGet($index, $array));
 });
 
-test('rewind resets the internal pointer', function () {
-    if (PHP_VERSION_ID >= 80000) {
-        /** @phpstan-ignore-next-line */
-        $this->markTestSkipped(LEGACY_SKIP_MSG);
-    }
-
-    $array = new SplFixedArray(5);
-    FixedArray::next($array);
-    FixedArray::rewind($array);
-
-    /** @phpstan-ignore-next-line */
-    $this->assertSame(0, FixedArray::key($array));
-});
-
 test('set size increases the size of a fixed array', function () {
     $originalSize = 5;
     $array = new SplFixedArray($originalSize);
@@ -144,17 +89,4 @@ test('to array converts the fixed array into a standard php array', function () 
 
     /** @phpstan-ignore-next-line */
     $this->assertEquals($test, head($convertedArray));
-});
-
-test('valid determines if there are any more remaining elements', function () {
-    if (PHP_VERSION_ID >= 80000) {
-        /** @phpstan-ignore-next-line */
-        $this->markTestSkipped(LEGACY_SKIP_MSG);
-    }
-
-    $array = new SplFixedArray(1);
-    FixedArray::next($array);
-
-    /** @phpstan-ignore-next-line */
-    $this->assertFalse(FixedArray::valid($array));
 });
