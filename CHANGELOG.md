@@ -2,6 +2,18 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v2.0.0 - 2024-12-14
+
+### Breaking Changes
+
+This drops support for versions of PHP below 8.3, and versions of Laravel below 11.
+
+#### What's Changed
+
+* v2 by @oliverearl in https://github.com/oliverearl/fixed-array-functions/pull/21
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v1.2.6...v2.0.0
+
 ## v1.2.6 - 2024-12-14
 
 ### What's Changed
