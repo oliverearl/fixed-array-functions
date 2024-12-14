@@ -11,10 +11,6 @@ use SplFixedArray;
  * FixedArrayable class.
  *
  * Provides a fluent interface for working with fixed arrays.
- *
- * @copyright Copyright (C) 2022 Petrobolos Games
- * @license MIT
- * @package Petrobolos\FixedArray
  */
 final class FixedArrayable implements JsonSerializable
 {
