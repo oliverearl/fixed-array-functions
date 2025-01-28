@@ -2,6 +2,14 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v2.0.1 - 2025-01-28
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/22
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v2.0.0...v2.0.1
+
 ## v2.0.0 - 2024-12-14
 
 ### Breaking Changes
