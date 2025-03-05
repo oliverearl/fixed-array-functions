@@ -2,6 +2,15 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v2.1.0 - 2025-03-05
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/23
+* Laravel 12 Support by @oliverearl in https://github.com/oliverearl/fixed-array-functions/pull/24
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v2.0.1...v2.1.0
+
 ## v2.0.1 - 2025-01-28
 
 ### What's Changed
