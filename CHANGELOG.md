@@ -2,6 +2,14 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v2.1.1 - 2025-03-22
+
+### What's Changed
+
+* Update orchestra/testbench requirement from ^9.0.0 to ^10.1.0 by @dependabot in https://github.com/oliverearl/fixed-array-functions/pull/25
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v2.1.0...v2.1.1
+
 ## v2.1.0 - 2025-03-05
 
 ### What's Changed
