@@ -241,6 +241,85 @@ describe('filter', function (): void {
     });
 });
 
+describe('find', function (): void {
+    it('returns the first matching element', function (): void {
+        $array = FixedArray::fromArray([1, 3, 5, 8, 10]);
+
+        $result = FixedArray::find($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result)->toBe(8);
+    });
+
+    it('returns null if no element matches', function (): void {
+        $array = FixedArray::fromArray([1, 3, 5]);
+
+        $result = FixedArray::find($array, fn(int $v): bool => $v > 10);
+
+        expect($result)->toBeNull();
+    });
+
+    it('can use key in the callback', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+
+        $result = FixedArray::find($array, fn(string $v, int $k): int => $k === 1);
+
+        expect($result)->toBe('b');
+    });
+
+    it('returns null for empty array', function (): void {
+        $array = FixedArray::create(0);
+
+        $result = FixedArray::find($array, fn(): true => true);
+
+        expect($result)->toBeNull();
+    });
+});
+
+describe('findKey', function (): void {
+    it('returns the index of the first matching element', function (): void {
+        $array = FixedArray::fromArray([1, 3, 5, 8, 10]);
+
+        $result = FixedArray::findKey($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result)->toBe(3);
+    });
+
+    it('returns null if no element matches', function (): void {
+        $array = FixedArray::fromArray([1, 3, 5]);
+
+        $result = FixedArray::findKey($array, fn(int $v): bool => $v > 10);
+
+        expect($result)->toBeNull();
+    });
+
+    it('can use both key and value in callback', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+
+        $result = FixedArray::findKey($array, fn(string $v, int $k): bool => $v === 'b' && $k === 1);
+
+        expect($result)->toBe(1);
+    });
+
+    it('returns null for empty arrays', function (): void {
+        $array = FixedArray::create(0);
+
+        $result = FixedArray::findKey($array, fn(): true => true);
+
+        expect($result)->toBeNull();
+    });
+});
+
+describe('findIndex', function (): void {
+    it('acts as an alias for findKey', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+
+        $keyFromFindKey = FixedArray::findKey($array, fn(int $v): bool => $v === 2);
+        $keyFromFindIndex = FixedArray::findIndex($array, fn(int $v): bool => $v === 2);
+
+        expect($keyFromFindIndex)->toBe($keyFromFindKey);
+    });
+});
+
 describe('first', function (): void {
     it('returns the first item of a non-empty array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);

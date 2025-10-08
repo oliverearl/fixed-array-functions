@@ -109,6 +109,53 @@ class FixedArray
     }
 
     /**
+     * Find the first element in the fixed array that satisfies the given callback.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function find(SplFixedArray $array, callable $callback): mixed
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find the key (index) of the first element in the fixed array that satisfies the given callback.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function findKey(SplFixedArray $array, callable $callback): ?int
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return $key;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Alias for findKey.
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::findKey()
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function findIndex(SplFixedArray $array, callable $callback): ?int
+    {
+        return self::findKey($array, $callback);
+    }
+
+    /**
      * Returns the first value from a fixed array.
      *
      * @throws \RuntimeException
