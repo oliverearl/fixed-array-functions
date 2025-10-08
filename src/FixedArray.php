@@ -312,6 +312,8 @@ class FixedArray
      *
      * @see \Petrobolos\FixedArray\FixedArray::setSize()
      *
+     * @throws \ValueError
+     *
      * @param \SplFixedArray<mixed> $array
      */
     public static function resize(int $size, SplFixedArray $array): bool
