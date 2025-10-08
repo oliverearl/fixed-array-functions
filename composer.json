@@ -55,7 +55,7 @@
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "analyse": "vendor/bin/phpstan analyse --memory-limit=2G",
         "test": "vendor/bin/pest",
-        "test:coverage": "vendor/bin/pest --coverage",
+        "test:coverage": "vendor/bin/pest --coverage --min=99",
         "test:type-coverage": "vendor/bin/pest --type-coverage",
         "test:profanity": "vendor/bin/pest --profanity",
         "format": "vendor/bin/pint"
