@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Petrobolos\FixedArray;
 
-use ArrayAccess;
 use Illuminate\Support\Collection;
 use SplFixedArray;
 
@@ -13,9 +12,11 @@ class FixedArray
     /**
      * Alias for push.
      *
-     * @param mixed $value
-     * @param \SplFixedArray $fixedArray
-     * @return \SplFixedArray
+     * @param \SplFixedArray<mixed> $fixedArray
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::push()
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function add(mixed $value, SplFixedArray $fixedArray): SplFixedArray
     {
@@ -25,11 +26,12 @@ class FixedArray
     /**
      * Adds values from a given array or array-like object into the current fixed array.
      *
-     * @param \ArrayAccess|array $items
-     * @param \SplFixedArray $array
-     * @return \SplFixedArray
+     * @param iterable<mixed> $items
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
      */
-    public static function addFrom(ArrayAccess|array $items, SplFixedArray $array): SplFixedArray
+    public static function addFrom(iterable $items, SplFixedArray $array): SplFixedArray
     {
         foreach ($items as $value) {
             self::add($value, $array);
@@ -40,14 +42,19 @@ class FixedArray
 
     /**
      * Returns whether a given item is contained within the array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function contains(mixed $item, SplFixedArray $array, bool $useStrict = true): bool
     {
+        /** @phpstan-ignore-next-line The third parameter can be Boolean, not just true. */
         return in_array($item, self::toArray($array), $useStrict);
     }
 
     /**
      * Returns the size of the array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function count(SplFixedArray $array): int
     {
@@ -56,6 +63,8 @@ class FixedArray
 
     /**
      * Create a new fixed array.
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function create(int $size = 5): SplFixedArray
     {
@@ -64,6 +73,11 @@ class FixedArray
 
     /**
      * Apply a callback to each item in the array without modifying the original array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): void $callback
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function each(SplFixedArray $array, callable $callback): SplFixedArray
     {
@@ -76,6 +90,11 @@ class FixedArray
 
     /**
      * Apply a filter to a given fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value): bool $callback
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function filter(SplFixedArray $array, callable $callback): SplFixedArray
     {
@@ -86,6 +105,8 @@ class FixedArray
 
     /**
      * Returns the first value from a fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function first(SplFixedArray $array): mixed
     {
@@ -94,6 +115,10 @@ class FixedArray
 
     /**
      * Import a PHP array into a fixed array.
+     *
+     * @param array<mixed, mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function fromArray(array $array, bool $preserveKeys = true): SplFixedArray
     {
@@ -102,6 +127,10 @@ class FixedArray
 
     /**
      * Import a collection into a fixed array.
+     *
+     * @param \Illuminate\Support\Collection<int|string, mixed> $collection
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function fromCollection(Collection $collection, bool $preserveKeys = true): SplFixedArray
     {
@@ -110,6 +139,8 @@ class FixedArray
 
     /**
      * Gets the size of the array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function getSize(SplFixedArray $array): int
     {
@@ -126,6 +157,8 @@ class FixedArray
 
     /**
      * Retrieves the last item from the array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function last(SplFixedArray $array): mixed
     {
@@ -133,31 +166,49 @@ class FixedArray
     }
 
     /**
-     * Apply a callback to each item in the array and return the new array.
+     * Apply a callback to each item in the array and return a new fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @param callable(mixed): mixed $callback
+     *
+     * @return \SplFixedArray<mixed>
      */
-    public static function map(SplFixedArray $array, callable|string $callback): SplFixedArray
+    public static function map(SplFixedArray $array, callable $callback): SplFixedArray
     {
-        $array = array_map($callback, self::toArray($array));
+        $result = array_map($callback, self::toArray($array));
 
-        return self::fromArray($array);
+        return self::fromArray($result);
     }
 
+
     /**
-     * Merges multiple fixed arrays, arrays, or collections into a single fixed array.
+     * Merge multiple fixed arrays, arrays, or collections into one fixed array.
+     *
+     * @template T
+     *
+     * @param \SplFixedArray<T> $target
+     * @param (\SplFixedArray<T>|iterable<T>) ...$sources
+     *
+     * @return \SplFixedArray<T>
      */
-    public static function merge(SplFixedArray $array, SplFixedArray|array|Collection ...$arrays): SplFixedArray
+    public static function merge(SplFixedArray $target, SplFixedArray|iterable ...$sources): SplFixedArray
     {
-        foreach ($arrays as $items) {
-            foreach ($items as $item) {
-                self::push($item, $array);
+        foreach ($sources as $source) {
+            foreach ($source as $item) {
+                self::push($item, $target);
             }
         }
 
-        return $array;
+        return $target;
     }
+
+
 
     /**
      * Replaces the contents of a fixed array with nulls.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function nullify(SplFixedArray $array): void
     {
@@ -168,6 +219,8 @@ class FixedArray
 
     /**
      * Return whether the specified index exists.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function offsetExists(int $index, SplFixedArray $array): bool
     {
@@ -176,6 +229,8 @@ class FixedArray
 
     /**
      * Returns the value at the specified index.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function offsetGet(int $index, SplFixedArray $array): mixed
     {
@@ -184,6 +239,8 @@ class FixedArray
 
     /**
      * Set a given offset to a null value.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function offsetNull(int $index, SplFixedArray $array): void
     {
@@ -192,6 +249,8 @@ class FixedArray
 
     /**
      * Sets a new value at a specified index.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function offsetSet(int $index, mixed $value, SplFixedArray $array): void
     {
@@ -200,6 +259,8 @@ class FixedArray
 
     /**
      * Pops the latest value from the array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function pop(SplFixedArray $array): mixed
     {
@@ -218,6 +279,10 @@ class FixedArray
     /**
      * Pushes a given value to the first available space on the array.
      * If the array is too small, the array size is extended by a single value.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
      */
     public static function push(mixed $value, SplFixedArray $array): SplFixedArray
     {
@@ -237,6 +302,10 @@ class FixedArray
 
     /**
      * Alias for setSize.
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::setSize()
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function resize(int $size, SplFixedArray $array): bool
     {
@@ -245,6 +314,8 @@ class FixedArray
 
     /**
      * Returns the second value from a fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function second(SplFixedArray $array): mixed
     {
@@ -257,6 +328,8 @@ class FixedArray
 
     /**
      * Change the size of an array.
+     *
+     * @param \SplFixedArray<mixed> $array
      */
     public static function setSize(int $size, SplFixedArray $array): bool
     {
@@ -265,6 +338,10 @@ class FixedArray
 
     /**
      * Returns a PHP array from the fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return array<int, mixed>
      */
     public static function toArray(SplFixedArray $array): array
     {
@@ -273,6 +350,10 @@ class FixedArray
 
     /**
      * Returns a collection from the fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \Illuminate\Support\Collection<int, mixed>
      */
     public static function toCollection(SplFixedArray $array): Collection
     {
