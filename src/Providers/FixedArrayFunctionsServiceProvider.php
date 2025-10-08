@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Petrobolos\FixedArray;
+namespace Petrobolos\FixedArray\Providers;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
