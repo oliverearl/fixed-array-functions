@@ -68,6 +68,43 @@ describe('add from', function (): void {
     });
 });
 
+describe('chunk', function (): void {
+    it('splits a fixed array into evenly sized chunks', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5, 6]);
+        $result = FixedArray::chunk($array, 2);
+
+        expect($result)->toBeInstanceOf(SplFixedArray::class)
+            ->and($result->count())->toBe(3)
+            ->and(FixedArray::toArray($result[0]))->toBe([1, 2])
+            ->and(FixedArray::toArray($result[1]))->toBe([3, 4])
+            ->and(FixedArray::toArray($result[2]))->toBe([5, 6]);
+    });
+
+    it('handles arrays not evenly divisible by the chunk size', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
+        $result = FixedArray::chunk($array, 2);
+
+        expect(FixedArray::toArray($result[0]))
+            ->toBe([1, 2])
+            ->and(FixedArray::toArray($result[1]))->toBe([3, 4])
+            ->and(FixedArray::toArray($result[2]))->toBe([5]);
+    });
+
+    it('returns an empty fixed array for empty input', function (): void {
+        $array = FixedArray::create(0);
+        $result = FixedArray::chunk($array, 2);
+
+        expect($result)
+            ->toBeInstanceOf(SplFixedArray::class)
+            ->and($result->count())->toBe(0);
+    });
+
+    it('throws an exception for non-positive chunk size', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        FixedArray::chunk($array, 0);
+    })->throws(InvalidArgumentException::class);
+});
+
 describe('contains', function (): void {
     it('returns true if the item exists in the array (strict)', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);

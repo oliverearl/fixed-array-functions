@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Petrobolos\FixedArray;
 
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use SplFixedArray;
 
 class FixedArray
@@ -41,6 +42,31 @@ class FixedArray
 
         return $array;
     }
+
+    /**
+     * Split a fixed array into chunks of a given size.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return \SplFixedArray<SplFixedArray<mixed>>
+     */
+    public static function chunk(SplFixedArray $array, int $size): SplFixedArray
+    {
+        if ($size <= 0) {
+            throw new InvalidArgumentException('Chunk size must be greater than zero.');
+        }
+
+        $chunks = array_chunk(self::toArray($array), $size);
+        $fixedChunks = array_map(static fn(array $chunk): SplFixedArray => self::fromArray($chunk), $chunks);
+
+        /** @var SplFixedArray<SplFixedArray<mixed>> $fixed */
+        $fixed = self::fromArray($fixedChunks, false);
+
+        return $fixed;
+    }
+
 
     /**
      * Returns whether a given item is contained within the array.
