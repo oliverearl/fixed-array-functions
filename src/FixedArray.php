@@ -299,16 +299,10 @@ class FixedArray
      */
     public static function push(mixed $value, SplFixedArray $array): SplFixedArray
     {
-        foreach ($array as $index => $item) {
-            if ($item === null) {
-                $array[$index] = $value;
+        $size = self::count($array);
 
-                return $array;
-            }
-        }
-
-        self::setSize((self::count($array) + 1), $array);
-        self::offsetSet(self::count($array) - 1, $value, $array);
+        self::setSize($size + 1, $array);
+        self::offsetSet($size, $value, $array);
 
         return $array;
     }
