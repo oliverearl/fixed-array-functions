@@ -322,6 +322,21 @@ class FixedArray
     }
 
     /**
+     * Returns a new SplFixedArray with items in reverse order.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function reverse(SplFixedArray $array): SplFixedArray
+    {
+        return self::fromArray(
+            array_reverse(self::toArray($array)),
+            preserveKeys: false,
+        );
+    }
+
+    /**
      * Returns the second value from a fixed array.
      *
      * @param \SplFixedArray<mixed> $array

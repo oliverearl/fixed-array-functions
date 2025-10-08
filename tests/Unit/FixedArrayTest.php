@@ -700,6 +700,42 @@ describe('resize', function (): void {
     })->throws(ValueError::class);
 });
 
+describe('reverse', function (): void {
+    it('reverses a non-empty array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $reversed = FixedArray::reverse($array);
+
+        expect($reversed->toArray())->toEqual([3, 2, 1]);
+    });
+
+    it('works on an array with zero indices', function (): void {
+        $array = new SplFixedArray(0);
+        $reversed = FixedArray::reverse($array);
+
+        expect($reversed->count())
+            ->toBe(0)
+            ->and($reversed->toArray())
+            ->toEqual([]);
+    });
+
+    it('does not modify the original array', function (): void {
+        $array = FixedArray::fromArray([1, 2]);
+        $reversed = FixedArray::reverse($array);
+
+        expect($array->toArray())
+            ->toEqual([1, 2])
+            ->and($reversed->toArray())
+            ->toEqual([2, 1]);
+    });
+
+    it('supports mixed types and nulls', function (): void {
+        $array = FixedArray::fromArray([null, 'a', 1, true]);
+        $reversed = FixedArray::reverse($array);
+
+        expect($reversed->toArray())->toEqual([true, 1, 'a', null]);
+    });
+});
+
 describe('second', function (): void {
     it('returns the second item of a non-empty array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
