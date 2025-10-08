@@ -6,7 +6,7 @@ namespace Petrobolos\FixedArray\Tests;
 
 use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Petrobolos\FixedArray\Providers\FixedArrayFunctionsServiceProvider;
+use Petrobolos\FixedArray\Providers\FixedArrayServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -20,7 +20,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            FixedArrayFunctionsServiceProvider::class,
+            FixedArrayServiceProvider::class,
         ];
     }
 }

@@ -70,7 +70,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Petrobolos\\FixedArray\\Providers\\FixedArrayFunctionsServiceProvider"
+                "Petrobolos\\FixedArray\\Providers\\FixedArrayServiceProvider"
             ],
             "aliases": {
                 "FixedArray": "Petrobolos\\FixedArrayFunctions\\Facades\\FixedArray"
