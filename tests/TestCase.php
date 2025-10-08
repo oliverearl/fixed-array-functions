@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Petrobolos\FixedArray\Tests;
 
+use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Petrobolos\FixedArray\Providers\FixedArrayFunctionsServiceProvider;
 
-class TestCase extends Orchestra
+abstract class TestCase extends Orchestra
 {
     /** @inheritDoc */
     public function getEnvironmentSetUp($app): void
     {
-        config()->set('database.default', 'testing');
+        Config::set('database.default', 'testing');
     }
 
     /** @inheritDoc */
