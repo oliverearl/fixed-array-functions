@@ -560,6 +560,29 @@ class FixedArray
     }
 
     /**
+     * Shuffle the fixed array in place using cryptographically secure randomness.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @throws \Random\RandomException
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function shuffle(SplFixedArray $array): SplFixedArray
+    {
+        $values = self::toArray($array);
+        $count = count($values);
+
+        for ($i = $count - 1; $i > 0; $i--) {
+            $j = random_int(0, $i);
+
+            [$values[$i], $values[$j]] = [$values[$j], $values[$i]];
+        }
+
+        return self::fromArray($values, false);
+    }
+
+    /**
      * Returns a portion of the array as a new SplFixedArray.
      *
      * @param \SplFixedArray<mixed> $array

@@ -1157,6 +1157,40 @@ describe('shift', function (): void {
     });
 });
 
+describe('shuffle', function (): void {
+    it('returns a shuffled fixed array containing the same elements', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
+        $shuffled = FixedArray::shuffle($array);
+
+        // The order may change, but all elements must still exist!
+        expect(FixedArray::toArray($shuffled))
+            ->toHaveCount(5)
+            ->and(array_diff(FixedArray::toArray($array), FixedArray::toArray($shuffled)))
+            ->toBeEmpty();
+    });
+
+    it('returns an empty array when input is empty', function (): void {
+        $array = FixedArray::create(0);
+        $shuffled = FixedArray::shuffle($array);
+
+        expect(FixedArray::count($shuffled))
+            ->toBe(0)
+            ->and(FixedArray::toArray($shuffled))
+            ->toBe([]);
+    });
+
+    it('returns a new array without modifying the original', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $shuffled = FixedArray::shuffle($array);
+
+        expect(FixedArray::toArray($array))
+            ->toBe([1, 2, 3])
+            ->and(FixedArray::toArray($shuffled))
+            ->not()
+            ->toBe([1, 2, 3]);
+    });
+});
+
 describe('slice', function (): void {
     it('returns a portion of the array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
