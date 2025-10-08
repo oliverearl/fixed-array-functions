@@ -341,6 +341,107 @@ describe('first', function (): void {
     })->throws(RuntimeException::class);
 });
 
+describe('flatten', function (): void {
+    it('flattens a single-level nested fixed array', function (): void {
+        $nested = FixedArray::fromArray([
+            1,
+            FixedArray::fromArray([2, 3]),
+            4,
+        ]);
+
+        $result = FixedArray::flatten($nested);
+
+        expect(FixedArray::toArray($result))->toBe([1, 2, 3, 4]);
+    });
+
+    it('flattens deeply nested fixed arrays', function (): void {
+        $nested = FixedArray::fromArray([
+            1,
+            FixedArray::fromArray([
+                2,
+                FixedArray::fromArray([3, 4]),
+            ]),
+            5,
+        ]);
+
+        $result = FixedArray::flatten($nested);
+
+        expect(FixedArray::toArray($result))->toBe([1, 2, 3, 4, 5]);
+    });
+
+    it('flattens only up to the given depth', function (): void {
+        $nested = FixedArray::fromArray([
+            1,
+            FixedArray::fromArray([
+                2,
+                FixedArray::fromArray([3, 4]),
+            ]),
+            5,
+        ]);
+
+        $result = FixedArray::flatten($nested, 1);
+
+        $expected = [1, 2, FixedArray::fromArray([3, 4]), 5];
+
+        expect(array_map(
+            fn(int|SplFixedArray $item): array|int => $item instanceof SplFixedArray
+                ? FixedArray::toArray($item)
+                : $item,
+            FixedArray::toArray($result),
+        ))->toBe(array_map(
+            fn(int|SplFixedArray $item): array|int => $item instanceof SplFixedArray
+                ? FixedArray::toArray($item)
+                : $item,
+            $expected,
+        ));
+
+    });
+
+    it('handles empty arrays gracefully', function (): void {
+        $array = FixedArray::create(0);
+
+        $result = FixedArray::flatten($array);
+
+        expect(FixedArray::count($result))->toBe(0);
+    });
+
+    it('handles mixed types and non-iterables safely', function (): void {
+        $nested = FixedArray::fromArray([
+            1,
+            'foo',
+            FixedArray::fromArray([true, null]),
+            5.5,
+        ]);
+
+        $result = FixedArray::flatten($nested);
+
+        expect(FixedArray::toArray($result))->toBe([1, 'foo', true, null, 5.5]);
+    });
+
+    it('flattens a mix of scalars, arrays, collections, and fixed arrays', function (): void {
+        $array = FixedArray::fromArray([
+            1,
+            [2, 3],
+            collect([4, 5]),
+            FixedArray::fromArray([6, [7, 8]]),
+            9,
+        ]);
+
+        $result = FixedArray::flatten($array);
+
+        // Convert any nested SplFixedArrays to plain arrays for comparison.
+        $normalized = array_map(
+            fn(int|SplFixedArray $item): array|int => $item instanceof SplFixedArray
+                ? FixedArray::toArray($item)
+                : $item,
+            FixedArray::toArray($result),
+        );
+
+        expect($normalized)->toBe([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    });
+
+});
+
 describe('from array', function (): void {
     it('imports a non-empty PHP array into a SplFixedArray', function (): void {
         $array = [1, 2, 3];

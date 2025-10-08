@@ -168,6 +168,34 @@ class FixedArray
     }
 
     /**
+     * Flatten a nested fixed array or iterable into a single-level fixed array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param int|null $depth The maximum depth to flatten. Null flattens all levels.
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function flatten(SplFixedArray $array, ?int $depth = null): SplFixedArray
+    {
+        $result = [];
+
+        $flattenRecursive = static function (iterable $items, ?int $level) use (&$result, &$flattenRecursive): void {
+            foreach ($items as $item) {
+                if (($item instanceof SplFixedArray || is_iterable($item)) && ($level === null || $level > 0)) {
+                    $flattenRecursive($item, $level === null ? null : $level - 1);
+                } else {
+                    $result[] = $item;
+                }
+            }
+        };
+
+        $flattenRecursive($array, $depth);
+
+        return self::fromArray($result, false);
+    }
+
+
+    /**
      * Import a PHP array into a fixed array.
      *
      * @param array<mixed, mixed> $array
