@@ -346,6 +346,32 @@ class FixedArray
     }
 
     /**
+     * Removes and returns the first item from the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     */
+    public static function shift(SplFixedArray $array): mixed
+    {
+        $count = self::count($array);
+
+        if ($count === 0) {
+            return null;
+        }
+
+        $item = self::offsetGet(0, $array);
+
+        // Shift all items to the left and nullify the last slot.
+        for ($i = 1; $i < $count; $i++) {
+            self::offsetSet($i - 1, self::offsetGet($i, $array), $array);
+        }
+
+        self::offsetNull($count - 1, $array);
+
+        return $item;
+    }
+
+
+    /**
      * Returns a PHP array from the fixed array.
      *
      * @param \SplFixedArray<mixed> $array
@@ -367,5 +393,29 @@ class FixedArray
     public static function toCollection(SplFixedArray $array): Collection
     {
         return collect($array);
+    }
+
+    /**
+     * Prepends a value to the start of the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function unshift(mixed $value, SplFixedArray $array): SplFixedArray
+    {
+        $count = self::count($array);
+
+        // Increase size by 1 to make space at index 0.
+        self::setSize($count + 1, $array);
+
+        // Shift all items one slot to the right and insert the new value at index 0.
+        for ($i = $count - 1; $i >= 0; $i--) {
+            self::offsetSet($i + 1, self::offsetGet($i, $array), $array);
+        }
+
+        self::offsetSet(0, $value, $array);
+
+        return $array;
     }
 }

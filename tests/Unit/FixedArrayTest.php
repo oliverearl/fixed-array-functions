@@ -784,6 +784,48 @@ describe('set size', function (): void {
     });
 });
 
+describe('shift', function (): void {
+    it('removes and returns the first item of a non-empty array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $value = FixedArray::shift($array);
+
+        expect($value)
+            ->toBe(1)
+            ->and($array->toArray())
+            ->toEqual([2, 3, null]);
+    });
+
+    it('returns null for array with no indices', function (): void {
+        $array = new SplFixedArray(0);
+        $value = FixedArray::shift($array);
+
+        expect($value)
+            ->toBeNull()
+            ->and($array->toArray())
+            ->toEqual([]);
+    });
+
+    it('works when the first value is null', function (): void {
+        $array = FixedArray::fromArray([null, 2, 3]);
+        $value = FixedArray::shift($array);
+
+        expect($value)
+            ->toBeNull()
+            ->and($array->toArray())
+            ->toEqual([2, 3, null]);
+    });
+
+    it('preserves array size after shift', function (): void {
+        $array = FixedArray::fromArray([1, 2]);
+        FixedArray::shift($array);
+
+        expect($array->getSize())
+            ->toBe(2)
+            ->and($array[1])
+            ->toBeNull();
+    });
+});
+
 describe('to array', function (): void {
     it('converts a non-empty SplFixedArray to a PHP array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
@@ -838,5 +880,44 @@ describe('to collection', function (): void {
         $result = FixedArray::toCollection($array);
 
         expect($result)->toEqual(collect([1, 'two', null, 4.5, true]));
+    });
+});
+
+describe('unshift', function (): void {
+    it('prepends a value to a non-empty array', function (): void {
+        $array = FixedArray::fromArray([2, 3]);
+        $result = FixedArray::unshift(1, $array);
+
+        expect($array->toArray())
+            ->toEqual([1, 2, 3])
+            ->and($result)
+            ->toBe($array);
+    });
+
+    it('works on an array with zero indices', function (): void {
+        $array = new SplFixedArray(0);
+        $result = FixedArray::unshift(1, $array);
+
+        expect($array->toArray())
+            ->toEqual([1])
+            ->and($result)
+            ->toBe($array);
+    });
+
+    it('supports mixed types', function (): void {
+        $array = FixedArray::fromArray(['b', 'c']);
+        $result = FixedArray::unshift(null, $array);
+
+        expect($array->toArray())
+            ->toEqual([null, 'b', 'c'])
+            ->and($result)
+            ->toBe($array);
+    });
+
+    it('preserves original items after prepending', function (): void {
+        $array = FixedArray::fromArray([true, false]);
+        FixedArray::unshift('start', $array);
+
+        expect($array->toArray())->toEqual(['start', true, false]);
     });
 });
