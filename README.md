@@ -14,7 +14,7 @@ large sets of data.
 
 ## Requirements
 
-Currently, requires PHP 8.3 or above, and Laravel 11+.
+Currently, requires PHP 8.4 or above, and Laravel 12+.
 
 ## Installation
 
