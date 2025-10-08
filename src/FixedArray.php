@@ -389,12 +389,16 @@ class FixedArray
      * Replaces the contents of a fixed array with nulls.
      *
      * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
      */
-    public static function nullify(SplFixedArray $array): void
+    public static function nullify(SplFixedArray $array): SplFixedArray
     {
         for ($i = 0, $iMax = self::count($array); $i < $iMax; $i++) {
             self::offsetNull($i, $array);
         }
+
+        return $array;
     }
 
     /**
