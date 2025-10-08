@@ -94,4 +94,16 @@ class FixedArrayable implements Arrayable
     {
         return FixedArray::toCollection($this->data);
     }
+
+    /**
+     * Alias for get.
+     *
+     * @see \Petrobolos\FixedArray\Fluent\FixedArrayable::get()
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public function toFixedArray(): SplFixedArray
+    {
+        return $this->get();
+    }
 }

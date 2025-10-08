@@ -103,4 +103,10 @@ describe('value returning methods', function (): void {
                 ->toEqual($this->contents);
         });
     });
+
+    describe('to fixed array', function (): void {
+        it('is an alias for get', function (): void {
+            expect($this->fluent->toFixedArray())->toBe($this->fluent->get());
+        });
+    });
 });
