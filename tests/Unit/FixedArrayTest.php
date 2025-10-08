@@ -966,6 +966,41 @@ describe('to collection', function (): void {
     });
 });
 
+describe('unique', function (): void {
+    it('removes duplicate values using strict comparison', function (): void {
+        $array = FixedArray::fromArray([1, true, 2, 2, '1']);
+        $unique = FixedArray::unique($array);
+
+        // true !== 1 and '1' !== 1, so all remain distinct
+        expect($unique->toArray())->toEqual([1, true, 2, '1']);
+    });
+
+    it('removes duplicate values using non-strict comparison', function (): void {
+        $array = FixedArray::fromArray([1, '1', 2, true]);
+        $unique = FixedArray::unique($array, false);
+
+        // 1 == '1' == true under non-strict comparison
+        expect($unique->toArray())->toEqual([1, 2]);
+    });
+
+    it('works with mixed types and nulls', function (): void {
+        $array = FixedArray::fromArray([null, 1, 'foo', null, 'foo', true]);
+        $unique = FixedArray::unique($array);
+
+        expect($unique->toArray())->toEqual([null, 1, 'foo', true]);
+    });
+
+    it('returns empty array if original array has zero indices', function (): void {
+        $array = new SplFixedArray(0);
+        $unique = FixedArray::unique($array);
+
+        expect($unique->count())
+            ->toBe(0)
+            ->and($unique->toArray())
+            ->toEqual([]);
+    });
+});
+
 describe('unshift', function (): void {
     it('prepends a value to a non-empty array', function (): void {
         $array = FixedArray::fromArray([2, 3]);

@@ -425,6 +425,44 @@ class FixedArray
     }
 
     /**
+     * Returns a new SplFixedArray with duplicate values removed.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function unique(SplFixedArray $array, bool $strict = true): SplFixedArray
+    {
+        $values = self::toArray($array);
+
+        if ($strict) {
+            $unique = [];
+
+            foreach ($values as $v) {
+                $found = false;
+
+                foreach ($unique as $u) {
+                    if ($v === $u) {
+                        $found = true;
+
+                        break;
+                    }
+                }
+
+                if (!$found) {
+                    $unique[] = $v;
+                }
+            }
+        } else {
+            $unique = array_unique($values);
+        }
+
+        return self::fromArray($unique, false);
+    }
+
+
+
+    /**
      * Prepends a value to the start of the array.
      *
      * @param \SplFixedArray<mixed> $array
