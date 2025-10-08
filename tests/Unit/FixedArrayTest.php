@@ -290,6 +290,23 @@ describe('each', function (): void {
     });
 });
 
+describe('fill', function (): void {
+    it('fills the array with the given value', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $filled = FixedArray::fill($array, 0);
+
+        expect(FixedArray::toArray($filled))->toBe([0, 0, 0]);
+    });
+
+    it('handles empty arrays gracefully', function (): void {
+        $array = FixedArray::create(0);
+        $filled = FixedArray::fill($array, 'x');
+
+        expect(FixedArray::count($filled))->toBe(0)
+            ->and(FixedArray::toArray($filled))->toBe([]);
+    });
+});
+
 describe('filter', function (): void {
     it('filters values based on a callback', function (): void {
         $array = FixedArray::fromArray([1, 2, 3, 4]);
@@ -938,6 +955,20 @@ describe('push', function (): void {
     });
 });
 
+describe('random', function (): void {
+    it('returns an element from a non-empty array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        $value = FixedArray::random($array);
+
+        expect($value)->toBeIn([1, 2, 3, 4]);
+    });
+
+    it('returns null for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::random($array))->toBeNull();
+    });
+});
+
 describe('resize', function (): void {
     it('resizes the array (alias for setSize)', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
@@ -1168,6 +1199,22 @@ describe('slice', function (): void {
             ->toBe(0)
             ->and($sliced->toArray())
             ->toEqual([]);
+    });
+});
+
+describe('sort', function (): void {
+    it('sorts numerically ascending by default', function (): void {
+        $array = FixedArray::fromArray([3, 1, 4, 2]);
+        $sorted = FixedArray::sort($array);
+
+        expect(FixedArray::toArray($sorted))->toBe([1, 2, 3, 4]);
+    });
+
+    it('sorts using a custom callback', function (): void {
+        $array = FixedArray::fromArray([3, 1, 4, 2]);
+        $sorted = FixedArray::sort($array, fn(int $a, int $b): int => $b <=> $a);
+
+        expect(FixedArray::toArray($sorted))->toBe([4, 3, 2, 1]);
     });
 });
 

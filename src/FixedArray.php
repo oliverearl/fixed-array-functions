@@ -156,6 +156,22 @@ class FixedArray
     }
 
     /**
+     * Fill a fixed array with the given value.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function fill(SplFixedArray $array, mixed $value): SplFixedArray
+    {
+        for ($i = 0, $max = self::count($array); $i < $max; $i++) {
+            self::offsetSet($i, $value, $array);
+        }
+
+        return $array;
+    }
+
+    /**
      * Apply a filter to a given fixed array.
      *
      * @param \SplFixedArray<mixed> $array
@@ -446,6 +462,26 @@ class FixedArray
     }
 
     /**
+     * Returns a random element from the fixed array, or null if empty.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @throws \Random\RandomException
+     */
+    public static function random(SplFixedArray $array): mixed
+    {
+        $count = self::count($array);
+
+        if ($count === 0) {
+            return null;
+        }
+
+        $randomIndex = random_int(0, $count - 1);
+
+        return self::offsetGet($randomIndex, $array);
+    }
+
+    /**
      * Alias for setSize.
      *
      * @see \Petrobolos\FixedArray\FixedArray::setSize()
@@ -536,6 +572,27 @@ class FixedArray
             array_slice(self::toArray($array), $offset, $length),
             preserveKeys: false,
         );
+    }
+
+    /**
+     * Sort the fixed array in ascending order.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable|null $callback Optional custom sort callback.
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function sort(SplFixedArray $array, ?callable $callback = null): SplFixedArray
+    {
+        $values = self::toArray($array);
+
+        if ($callback) {
+            usort($values, $callback);
+        } else {
+            sort($values);
+        }
+
+        return self::fromArray($values, false);
     }
 
     /**
