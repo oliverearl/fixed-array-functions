@@ -1191,7 +1191,11 @@ describe('shuffle', function (): void {
 
     it('returns a new array without modifying the original', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        $shuffled = FixedArray::shuffle($array);
+
+        // Keep shuffling until the order actually changes (to avoid false positives in tests).
+        do {
+            $shuffled = FixedArray::shuffle($array);
+        } while (FixedArray::toArray($shuffled) === FixedArray::toArray($array));
 
         expect(FixedArray::toArray($array))
             ->toBe([1, 2, 3])
