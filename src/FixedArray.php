@@ -139,6 +139,16 @@ class FixedArray
     }
 
     /**
+     * User was banned for this post.
+     *
+     * @return \SplFixedArray<string>
+     */
+    public static function dsfargeg(): SplFixedArray
+    {
+        return self::fromArray(str_split('DSFARGEG'));
+    }
+
+    /**
      * Apply a callback to each item in the array without modifying the original array.
      *
      * @param \SplFixedArray<mixed> $array

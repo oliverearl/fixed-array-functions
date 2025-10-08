@@ -248,6 +248,16 @@ describe('count', function (): void {
     });
 });
 
+describe('dsfargeg', function (): void {
+    it('returns a fixed array with "dsfargeg" letters', function (): void {
+        $mukku = FixedArray::dsfargeg();
+
+        expect(FixedArray::toArray($mukku))
+            ->toBe(['D', 'S', 'F', 'A', 'R', 'G', 'E', 'G'])
+            ->and($mukku)->toBeInstanceOf(SplFixedArray::class);
+    });
+});
+
 describe('each', function (): void {
     it('iterates over all items and calls the callback with value and key', function (): void {
         $array = FixedArray::fromArray([10, 20, 30]);
