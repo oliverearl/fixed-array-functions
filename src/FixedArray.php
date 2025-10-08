@@ -102,7 +102,8 @@ class FixedArray
     {
         $result = array_filter(self::toArray($array), $callback);
 
-        return self::fromArray($result);
+        // Reindex to avoid null-filled gaps caused by preserved keys.
+        return self::fromArray(array_values($result), false);
     }
 
     /**
