@@ -862,6 +862,53 @@ describe('shift', function (): void {
     });
 });
 
+describe('slice', function (): void {
+    it('returns a portion of the array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
+        $sliced = FixedArray::slice($array, 1, 3);
+
+        expect($sliced->toArray())->toEqual([2, 3, 4]);
+    });
+
+    it('returns from offset to end if length is null', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        $sliced = FixedArray::slice($array, 2);
+
+        expect($sliced->toArray())->toEqual([3, 4]);
+    });
+
+    it('works with negative offset', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        $sliced = FixedArray::slice($array, -2);
+
+        expect($sliced->toArray())->toEqual([3, 4]);
+    });
+
+    it('works with negative length', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
+        $sliced = FixedArray::slice($array, 1, -2);
+
+        expect($sliced->toArray())->toEqual([2, 3]);
+    });
+
+    it('returns an empty array if offset exceeds array length', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $sliced = FixedArray::slice($array, 5);
+
+        expect($sliced->toArray())->toEqual([]);
+    });
+
+    it('returns an empty array when slicing an empty SplFixedArray', function (): void {
+        $array = new SplFixedArray(0);
+        $sliced = FixedArray::slice($array, 0, 3);
+
+        expect($sliced->count())
+            ->toBe(0)
+            ->and($sliced->toArray())
+            ->toEqual([]);
+    });
+});
+
 describe('to array', function (): void {
     it('converts a non-empty SplFixedArray to a PHP array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);

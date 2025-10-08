@@ -385,6 +385,20 @@ class FixedArray
         return $item;
     }
 
+    /**
+     * Returns a portion of the array as a new SplFixedArray.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function slice(SplFixedArray $array, int $offset, ?int $length = null): SplFixedArray
+    {
+        return self::fromArray(
+            array_slice(self::toArray($array), $offset, $length),
+            preserveKeys: false,
+        );
+    }
 
     /**
      * Returns a PHP array from the fixed array.
