@@ -95,6 +95,7 @@ $everything = FixedArray::merge(
 | findKey        | Return the key of the first element matching a callback.            |
 | findIndex      | Alias for findKey.                                                  |
 | first          | Return the first element of the array.                              |
+| fluent         | Creates a new fluent interface for chaining methods.                |
 | flatten        | Flatten nested arrays, collections, and fixed arrays.               |
 | fromArray      | Create a fixed array from a standard array.                         |
 | fromCollection | Create a fixed array from an Illuminate collection.                 |

@@ -8,6 +8,7 @@ namespace Petrobolos\FixedArray;
 
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use Petrobolos\FixedArray\Fluent\FixedArrayable;
 use SplFixedArray;
 
 class FixedArray
@@ -146,6 +147,14 @@ class FixedArray
     public static function dsfargeg(): SplFixedArray
     {
         return self::fromArray(str_split('DSFARGEG'));
+    }
+
+    /**
+     * Create a new fluent interface.
+     */
+    public static function fluent(mixed $value, ?int $count = null, bool $preserveKeys = true): FixedArrayable
+    {
+        return FixedArrayable::make($value, $count, $preserveKeys);
     }
 
     /**

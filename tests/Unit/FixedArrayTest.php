@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Collection;
 use Petrobolos\FixedArray\FixedArray;
+use Petrobolos\FixedArray\Fluent\FixedArrayable;
 
 describe('add', function (): void {
     it('adds a value to the end of the array (alias for push)', function (): void {
@@ -551,6 +552,29 @@ describe('flatten', function (): void {
         expect($normalized)->toBe([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
 
+});
+
+describe('fluent', function (): void {
+    it('creates a fluent interface from a PHP array', function (): void {
+        $array = [1, 2, 3];
+        $fluent = FixedArray::fluent($array);
+
+        expect($fluent)->toBeInstanceOf(FixedArrayable::class);
+    });
+
+    it('creates a fluent interface from a collection', function (): void {
+        $collection = collect([1, 2, 3]);
+        $fluent = FixedArray::fluent($collection);
+
+        expect($fluent)->toBeInstanceOf(FixedArrayable::class);
+    });
+
+    it('creates a fluent interface from an SplFixedArray', function (): void {
+        $fixed = FixedArray::fromArray([1, 2, 3]);
+        $fluent = FixedArray::fluent($fixed);
+
+        expect($fluent)->toBeInstanceOf(FixedArrayable::class);
+    });
 });
 
 describe('from array', function (): void {
