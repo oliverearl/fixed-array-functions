@@ -343,7 +343,7 @@ describe('find', function (): void {
     it('can use key in the callback', function (): void {
         $array = FixedArray::fromArray(['a', 'b', 'c']);
 
-        $result = FixedArray::find($array, fn(string $v, int $k): int => $k === 1);
+        $result = FixedArray::find($array, fn(string $v, int $k): bool => $k === 1);
 
         expect($result)->toBe('b');
     });
