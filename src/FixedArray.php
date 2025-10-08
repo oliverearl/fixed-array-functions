@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection */
+
 declare(strict_types=1);
 
 namespace Petrobolos\FixedArray;
