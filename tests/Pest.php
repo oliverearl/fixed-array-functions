@@ -3,5 +3,7 @@
 declare(strict_types=1);
 
 use Petrobolos\FixedArray\Tests\TestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-uses(TestCase::class)->in(__DIR__);
+uses(BaseTestCase::class)->in('Unit');
+uses(TestCase::class)->in('Feature');
