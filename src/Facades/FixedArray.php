@@ -7,7 +7,7 @@ namespace Petrobolos\FixedArray\Facades;
 use Illuminate\Support\Facades\Facade;
 use Petrobolos\FixedArray\FixedArray as BaseFixedArray;
 
-/** @see FixedArray */
+/** @mixin \Petrobolos\FixedArray\FixedArray */
 class FixedArray extends Facade
 {
     /**
