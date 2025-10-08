@@ -66,6 +66,8 @@ class FixedArray
     /**
      * Create a new fixed array.
      *
+     * @throws \ValueError
+     *
      * @return \SplFixedArray<mixed>
      */
     public static function create(int $size = 5): SplFixedArray
@@ -108,6 +110,8 @@ class FixedArray
 
     /**
      * Returns the first value from a fixed array.
+     *
+     * @throws \RuntimeException
      *
      * @param \SplFixedArray<mixed> $array
      */
@@ -161,6 +165,8 @@ class FixedArray
     /**
      * Retrieves the last item from the array.
      *
+     * @throws \RuntimeException
+     *
      * @param \SplFixedArray<mixed> $array
      */
     public static function last(SplFixedArray $array): mixed
@@ -206,8 +212,6 @@ class FixedArray
         return $target;
     }
 
-
-
     /**
      * Replaces the contents of a fixed array with nulls.
      *
@@ -233,6 +237,8 @@ class FixedArray
     /**
      * Returns the value at the specified index.
      *
+     * @throws \RuntimeException
+     *
      * @param \SplFixedArray<mixed> $array
      */
     public static function offsetGet(int $index, SplFixedArray $array): mixed
@@ -243,6 +249,8 @@ class FixedArray
     /**
      * Set a given offset to a null value.
      *
+     * @throws \RuntimeException
+     *
      * @param \SplFixedArray<mixed> $array
      */
     public static function offsetNull(int $index, SplFixedArray $array): void
@@ -252,6 +260,8 @@ class FixedArray
 
     /**
      * Sets a new value at a specified index.
+     *
+     * @throws \RuntimeException
      *
      * @param \SplFixedArray<mixed> $array
      */
