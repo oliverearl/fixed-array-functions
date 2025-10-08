@@ -67,6 +67,43 @@ class FixedArray
         return $fixed;
     }
 
+    /**
+     * Chunk a fixed array while the given condition is true.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, mixed $key, ?mixed $previous): bool $callback
+     *
+     * @return \SplFixedArray<\SplFixedArray<mixed>>
+     */
+    public static function chunkWhile(SplFixedArray $array, callable $callback): SplFixedArray
+    {
+        $chunks = [];
+        $currentChunk = [];
+
+        $previous = null;
+
+        foreach ($array as $key => $value) {
+            if ($currentChunk === []) {
+                $currentChunk[] = $value;
+            } elseif ($callback($value, $key, $previous)) {
+                $currentChunk[] = $value;
+            } else {
+                $chunks[] = self::fromArray($currentChunk);
+                $currentChunk = [$value];
+            }
+
+            $previous = $value;
+        }
+
+        if ($currentChunk !== []) {
+            $chunks[] = self::fromArray($currentChunk);
+        }
+
+        /** @var \SplFixedArray<\SplFixedArray<mixed>> $fixed */
+        $fixed = self::fromArray($chunks, false);
+
+        return $fixed;
+    }
 
     /**
      * Returns whether a given item is contained within the array.

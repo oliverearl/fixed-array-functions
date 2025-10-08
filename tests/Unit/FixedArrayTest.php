@@ -105,6 +105,49 @@ describe('chunk', function (): void {
     })->throws(InvalidArgumentException::class);
 });
 
+describe('chunk while', function (): void {
+    it('chunks consecutive increasing numbers together', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 7, 8, 10, 11, 12]);
+        $result = FixedArray::chunkWhile($array, function (int $value, int $key, ?int $previous): bool {
+            return $previous !== null && $value === $previous + 1;
+        });
+
+        expect($result->count())
+            ->toBe(3)
+            ->and(FixedArray::toArray($result[0]))->toBe([1, 2, 3])
+            ->and(FixedArray::toArray($result[1]))->toBe([7, 8])
+            ->and(FixedArray::toArray($result[2]))->toBe([10, 11, 12]);
+    });
+
+    it('creates single-item chunks when callback always returns false', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+        $result = FixedArray::chunkWhile($array, fn(): false => false);
+
+        expect($result->count())
+            ->toBe(3)
+            ->and(FixedArray::toArray($result[0]))->toBe(['a'])
+            ->and(FixedArray::toArray($result[1]))->toBe(['b'])
+            ->and(FixedArray::toArray($result[2]))->toBe(['c']);
+    });
+
+    it('creates one full chunk when callback always returns true', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $result = FixedArray::chunkWhile($array, fn(): true => true);
+
+        expect($result->count())
+            ->toBe(1)
+            ->and(FixedArray::toArray($result[0]))
+            ->toBe([1, 2, 3]);
+    });
+
+    it('handles an empty array gracefully', function (): void {
+        $array = FixedArray::create(0);
+        $result = FixedArray::chunkWhile($array, fn(): true => true);
+
+        expect($result->count())->toBe(0);
+    });
+});
+
 describe('contains', function (): void {
     it('returns true if the item exists in the array (strict)', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
