@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Petrobolos\FixedArray\FixedArray;
 
 test('add from merges the contents of a given iterator into a fixed array', function () {

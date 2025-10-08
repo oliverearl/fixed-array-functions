@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Petrobolos\FixedArray\FixedArrayable;
 
 if (! function_exists('fixedArray')) {

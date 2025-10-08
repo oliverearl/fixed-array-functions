@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Petrobolos\FixedArray\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Petrobolos\FixedArray\FixedArrayFunctionsServiceProvider;
+use Petrobolos\FixedArray\Providers\FixedArrayFunctionsServiceProvider;
 
 class TestCase extends Orchestra
 {

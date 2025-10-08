@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Petrobolos\FixedArray\FixedArray;
 
 test('count provides the size of the fixed array', function () {

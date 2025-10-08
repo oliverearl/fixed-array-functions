@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Petrobolos\FixedArray\FixedArray;
 
 test('add from can add array data to the existing array', function () {
