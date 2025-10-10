@@ -31,12 +31,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      # Always install pcov (lightweight coverage driver)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: ${{ matrix.stability == 'prefer-stable' && matrix.php == 8.4 && matrix.os == 'ubuntu-latest' && 'xdebug' || 'none' }}
+          coverage: pcov
 
       - name: Setup problem matchers
         run: |
@@ -52,17 +52,12 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: |
-          if [[ "${{ matrix.stability }}" == "prefer-stable" ]]; then
-            phpdbg -qrr vendor/bin/pest --ci
-          else
-            vendor/bin/pest --ci
-          fi
+        run: vendor/bin/pest --ci
 
+      # Only generate & upload full coverage report on stable build
       - name: Generate Coverage Report
         if: matrix.stability == 'prefer-stable'
-        run: |
-          phpdbg -qrr vendor/bin/pest --coverage-html coverage-report --coverage-clover coverage.xml
+        run: vendor/bin/pest --coverage-html coverage-report --coverage-clover coverage.xml
 
       - name: Upload Coverage Artifact
         if: matrix.stability == 'prefer-stable'
