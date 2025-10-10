@@ -391,7 +391,7 @@ class FixedArrayable implements Arrayable
     }
 
     /**
-     * @inheritDoc
+     * Get the instance as a plain array.
      *
      * @return array<int, mixed>
      */
