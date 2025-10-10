@@ -13,6 +13,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
+
     strategy:
       fail-fast: true
       matrix:
@@ -35,7 +36,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: none
+          coverage: ${{ matrix.stability == 'prefer-stable' && matrix.php == 8.4 && matrix.os == 'ubuntu-latest' && 'xdebug' || 'none' }}
 
       - name: Setup problem matchers
         run: |
@@ -51,10 +52,29 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: vendor/bin/pest --ci
+        run: |
+          if [[ "${{ matrix.stability }}" == "prefer-stable" ]]; then
+            phpdbg -qrr vendor/bin/pest --ci
+          else
+            vendor/bin/pest --ci
+          fi
+
+      - name: Generate Coverage Report
+        if: matrix.stability == 'prefer-stable'
+        run: |
+          phpdbg -qrr vendor/bin/pest --coverage-html coverage-report --coverage-clover coverage.xml
+
+      - name: Upload Coverage Artifact
+        if: matrix.stability == 'prefer-stable'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
 
       - name: Check Type Coverage
+        if: matrix.stability == 'prefer-stable'
         run: vendor/bin/pest --type-coverage=100
 
       - name: Check Profanity
+        if: matrix.stability == 'prefer-stable'
         run: vendor/bin/pest --profanity
