@@ -10,14 +10,6 @@ use Petrobolos\FixedArray\Providers\FixedArrayServiceProvider;
 abstract class TestCase extends Orchestra
 {
     /** @inheritDoc */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        restore_exception_handler();
-    }
-
-    /** @inheritDoc */
     public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
