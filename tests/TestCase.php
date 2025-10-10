@@ -6,18 +6,15 @@ namespace Petrobolos\FixedArray\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 use Petrobolos\FixedArray\Providers\FixedArrayServiceProvider;
-use TypeError;
 
 abstract class TestCase extends Orchestra
 {
     /** @inheritDoc */
-    protected function setUp(): void
+    protected function tearDown(): void
     {
-        try {
-            parent::setUp();
-        } catch (TypeError) {
-            // Ignore PHPUnit handler error when no test instance exists
-        }
+        parent::tearDown();
+
+        restore_exception_handler();
     }
 
     /** @inheritDoc */
