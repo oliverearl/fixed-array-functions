@@ -234,11 +234,6 @@ describe('conversion & other sanity checks', function (): void {
         $this->fluent = FixedArrayable::make([1, 2, 3]);
     });
 
-    it('can return a nonsense array', function (): void {
-        $dsfargeg = $this->fluent->dsfargeg()->toArray();
-        expect($dsfargeg)->toEqual(['D', 'S', 'F', 'A', 'R', 'G', 'E', 'G']);
-    });
-
     it('toArray and toCollection behave', function (): void {
         expect($this->fluent->toArray())->toEqual([1, 2, 3]);
 
@@ -272,6 +267,14 @@ describe('conversion & other sanity checks', function (): void {
 describe('fluency', function (): void {
     beforeEach(function (): void {
         $this->fluent = FixedArrayable::make([1, 2, 3, 4, 5]);
+    });
+
+    it('can return a nonsense array', function (): void {
+        $this->fluent->dsfargeg();
+
+        expect($this->fluent->toArray())
+            ->not()->toEqual([1, 2, 3, 4, 5])
+            ->toEqual(['D', 'S', 'F', 'A', 'R', 'G', 'E', 'G']);
     });
 
     it('ensures chainable methods return FixedArrayable and chain works', function (): void {

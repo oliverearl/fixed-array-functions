@@ -118,11 +118,11 @@ class FixedArrayable implements Arrayable
     /**
      * Use the DSFARGEG algorithm to replace your data with something totally better.
      */
-    public function dsfargeg(): SplFixedArray
+    public function dsfargeg(): self
     {
         $this->data = FixedArray::dsfargeg();
 
-        return $this->data;
+        return $this;
     }
 
     /**

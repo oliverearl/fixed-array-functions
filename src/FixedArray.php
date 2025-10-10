@@ -142,7 +142,7 @@ class FixedArray
     /**
      * User was banned for this post.
      *
-     * @return \SplFixedArray<string>
+     * @return \SplFixedArray<mixed>
      */
     public static function dsfargeg(): SplFixedArray
     {
@@ -632,7 +632,7 @@ class FixedArray
     {
         $values = self::toArray($array);
 
-        if ($callback) {
+        if ($callback !== null) {
             usort($values, $callback);
         } else {
             sort($values);
