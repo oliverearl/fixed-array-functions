@@ -51,7 +51,7 @@ class FixedArray
      *
      * @throws \InvalidArgumentException
      *
-     * @return \SplFixedArray<SplFixedArray<mixed>>
+     * @return \SplFixedArray<mixed>
      */
     public static function chunk(SplFixedArray $array, int $size): SplFixedArray
     {
@@ -62,10 +62,7 @@ class FixedArray
         $chunks = array_chunk(self::toArray($array), $size);
         $fixedChunks = array_map(static fn(array $chunk): SplFixedArray => self::fromArray($chunk), $chunks);
 
-        /** @var SplFixedArray<SplFixedArray<mixed>> $fixed */
-        $fixed = self::fromArray($fixedChunks, false);
-
-        return $fixed;
+        return self::fromArray($fixedChunks, false);
     }
 
     /**
@@ -74,7 +71,7 @@ class FixedArray
      * @param \SplFixedArray<mixed> $array
      * @param callable(mixed $value, mixed $key, ?mixed $previous): bool $callback
      *
-     * @return \SplFixedArray<\SplFixedArray<mixed>>
+     * @return \SplFixedArray<mixed>
      */
     public static function chunkWhile(SplFixedArray $array, callable $callback): SplFixedArray
     {
@@ -100,10 +97,7 @@ class FixedArray
             $chunks[] = self::fromArray($currentChunk);
         }
 
-        /** @var \SplFixedArray<\SplFixedArray<mixed>> $fixed */
-        $fixed = self::fromArray($chunks, false);
-
-        return $fixed;
+        return self::fromArray($chunks, false);
     }
 
     /**

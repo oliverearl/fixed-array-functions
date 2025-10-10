@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Petrobolos\FixedArray\FixedArray;
 use SplFixedArray;
 
-class FixedArrayable implements Arrayable
+class FixedArrayable
 {
     /**
      * Create a new fluent interface instance.
