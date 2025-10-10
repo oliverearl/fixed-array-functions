@@ -11,7 +11,7 @@ use Petrobolos\FixedArray\Fluent\FixedArrayable;
 describe('add', function (): void {
     it('adds a value to the end of the array (alias for push)', function (): void {
         $array = FixedArray::fromArray([1, 2]);
-        $result = FixedArray::add(3, $array);
+        $result = FixedArray::add($array, 3);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3])
@@ -22,7 +22,7 @@ describe('add', function (): void {
 describe('add from', function (): void {
     it('adds values from a PHP array', function (): void {
         $array = FixedArray::fromArray([1, 2]);
-        $result = FixedArray::addFrom([3, 4], $array);
+        $result = FixedArray::addFrom($array, [3, 4]);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3, 4])
@@ -33,7 +33,7 @@ describe('add from', function (): void {
     it('adds values from another SplFixedArray', function (): void {
         $array = FixedArray::fromArray([1]);
         $source = FixedArray::fromArray([2, 3]);
-        $result = FixedArray::addFrom($source, $array);
+        $result = FixedArray::addFrom($array, $source);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3])
@@ -44,7 +44,7 @@ describe('add from', function (): void {
     it('adds values from a collection', function (): void {
         $array = FixedArray::fromArray([1]);
         $source = collect([2, 3]);
-        $result = FixedArray::addFrom($source, $array);
+        $result = FixedArray::addFrom($array, $source);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3])
@@ -54,7 +54,7 @@ describe('add from', function (): void {
 
     it('works with empty iterable', function (): void {
         $array = FixedArray::fromArray([1, 2]);
-        $result = FixedArray::addFrom([], $array);
+        $result = FixedArray::addFrom($array, []);
 
         expect($array->toArray())
             ->toEqual([1, 2])
@@ -64,7 +64,7 @@ describe('add from', function (): void {
     it('supports mixed types', function (): void {
         $array = FixedArray::fromArray([1]);
         $source = ['foo', null, true];
-        $result = FixedArray::addFrom($source, $array);
+        $result = FixedArray::addFrom($array, $source);
 
         expect($array->toArray())
             ->toEqual([1, 'foo', null, true])
@@ -156,37 +156,37 @@ describe('chunk while', function (): void {
 describe('contains', function (): void {
     it('returns true if the item exists in the array (strict)', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        expect(FixedArray::contains(2, $array))->toBeTrue();
+        expect(FixedArray::contains($array, 2))->toBeTrue();
     });
 
     it('returns false if the item does not exist (strict)', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        expect(FixedArray::contains(4, $array))->toBeFalse();
+        expect(FixedArray::contains($array, 4))->toBeFalse();
     });
 
     it('respects strict parameter (type check)', function (): void {
         $array = FixedArray::fromArray([1, '2', 3]);
 
-        expect(FixedArray::contains(2, $array))
+        expect(FixedArray::contains($array, 2))
             ->toBeFalse()
-            ->and(FixedArray::contains(2, $array, false))
+            ->and(FixedArray::contains($array, 2, false))
             ->toBeTrue();
     });
 
     it('works with mixed types and null', function (): void {
         $array = FixedArray::fromArray([1, null, 'foo', true]);
 
-        expect(FixedArray::contains(null, $array))
+        expect(FixedArray::contains($array, null))
             ->toBeTrue()
-            ->and(FixedArray::contains('foo', $array))
+            ->and(FixedArray::contains($array, 'foo'))
             ->toBeTrue()
-            ->and(FixedArray::contains(false, $array))
+            ->and(FixedArray::contains($array, false))
             ->toBeFalse();
     });
 
     it('returns false for array with no indices', function (): void {
         $array = new SplFixedArray(0);
-        expect(FixedArray::contains(1, $array))->toBeFalse();
+        expect(FixedArray::contains($array, 1))->toBeFalse();
     });
 });
 
@@ -886,7 +886,7 @@ describe('offset null', function (): void {
 describe('offset set', function (): void {
     it('sets a value at a valid index', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        FixedArray::offsetSet(1, 42, $array);
+        FixedArray::offsetSet($array, 1, 42);
 
         expect($array[1])
             ->toBe(42)
@@ -896,19 +896,19 @@ describe('offset set', function (): void {
 
     it('overwrites a value at an existing index', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        FixedArray::offsetSet(0, 'foo', $array);
+        FixedArray::offsetSet($array, 0, 'foo');
 
         expect($array[0])->toBe('foo');
     });
 
     it('throws exception when index is out of bounds', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        FixedArray::offsetSet(5, 99, $array);
+        FixedArray::offsetSet($array, 5, 99);
     })->throws(RuntimeException::class);
 
     it('supports setting mixed types', function (): void {
         $array = FixedArray::fromArray([null, null, null]);
-        FixedArray::offsetSet(2, [1, 2, 3], $array);
+        FixedArray::offsetSet($array, 2, [1, 2, 3]);
 
         expect($array[2])->toEqual([1, 2, 3]);
     });
@@ -956,7 +956,7 @@ describe('pop', function (): void {
 describe('push', function (): void {
     it('adds a value to the end of a non-empty array', function (): void {
         $array = FixedArray::fromArray([1, 2, 3]);
-        $result = FixedArray::push(4, $array);
+        $result = FixedArray::push($array, 4);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3, 4])
@@ -965,7 +965,7 @@ describe('push', function (): void {
 
     it('adds a value to an empty array', function (): void {
         $array = new SplFixedArray(0);
-        $result = FixedArray::push(1, $array);
+        $result = FixedArray::push($array, 1);
 
         expect($array->toArray())
             ->toEqual([1])
@@ -974,7 +974,7 @@ describe('push', function (): void {
 
     it('preserves existing null values', function (): void {
         $array = FixedArray::fromArray([1, null, 3]);
-        $result = FixedArray::push(4, $array);
+        $result = FixedArray::push($array, 4);
 
         expect($array->toArray())
             ->toEqual([1, null, 3, 4])
@@ -983,7 +983,7 @@ describe('push', function (): void {
 
     it('supports mixed types', function (): void {
         $array = FixedArray::fromArray([1, 'foo']);
-        $result = FixedArray::push([1, 2], $array);
+        $result = FixedArray::push($array, [1, 2]);
 
         expect($array->toArray())
             ->toEqual([1, 'foo', [1, 2]])
@@ -1387,7 +1387,7 @@ describe('unique', function (): void {
 describe('unshift', function (): void {
     it('prepends a value to a non-empty array', function (): void {
         $array = FixedArray::fromArray([2, 3]);
-        $result = FixedArray::unshift(1, $array);
+        $result = FixedArray::unshift($array, 1);
 
         expect($array->toArray())
             ->toEqual([1, 2, 3])
@@ -1397,7 +1397,7 @@ describe('unshift', function (): void {
 
     it('works on an array with zero indices', function (): void {
         $array = new SplFixedArray(0);
-        $result = FixedArray::unshift(1, $array);
+        $result = FixedArray::unshift($array, 1);
 
         expect($array->toArray())
             ->toEqual([1])
@@ -1407,7 +1407,7 @@ describe('unshift', function (): void {
 
     it('supports mixed types', function (): void {
         $array = FixedArray::fromArray(['b', 'c']);
-        $result = FixedArray::unshift(null, $array);
+        $result = FixedArray::unshift($array, null);
 
         expect($array->toArray())
             ->toEqual([null, 'b', 'c'])
@@ -1417,7 +1417,7 @@ describe('unshift', function (): void {
 
     it('preserves original items after prepending', function (): void {
         $array = FixedArray::fromArray([true, false]);
-        FixedArray::unshift('start', $array);
+        FixedArray::unshift($array, 'start');
 
         expect($array->toArray())->toEqual(['start', true, false]);
     });

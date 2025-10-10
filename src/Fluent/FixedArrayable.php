@@ -46,7 +46,7 @@ class FixedArrayable implements Arrayable
         // If a valid count is provided, create a fixed array of that size and push the value.
         if ($count !== null && $count > 0) {
             $array = FixedArray::create($count);
-            FixedArray::offsetSet(0, $value, $array);
+            FixedArray::offsetSet($array, 0, $value);
 
             return new self($array);
         }
@@ -82,7 +82,7 @@ class FixedArrayable implements Arrayable
      */
     public function addFrom(iterable $items): self
     {
-        $this->data = FixedArray::addFrom($items, $this->data);
+        $this->data = FixedArray::addFrom($this->data, $items);
 
         return $this;
     }
@@ -112,7 +112,7 @@ class FixedArrayable implements Arrayable
      */
     public function contains(mixed $value, bool $useStrict = true): bool
     {
-        return FixedArray::contains($value, $this->data, $useStrict);
+        return FixedArray::contains($this->data, $value, $useStrict);
     }
 
     /**
@@ -268,7 +268,7 @@ class FixedArrayable implements Arrayable
      */
     public function offsetSet(int $index, mixed $value): self
     {
-        FixedArray::offsetSet($index, $value, $this->data);
+        FixedArray::offsetSet($this->data, $index, $value);
 
         return $this;
     }
@@ -299,7 +299,7 @@ class FixedArrayable implements Arrayable
      */
     public function push(mixed $value): self
     {
-        $this->data = FixedArray::push($value, $this->data);
+        $this->data = FixedArray::push($this->data, $value);
 
         return $this;
     }
@@ -437,7 +437,7 @@ class FixedArrayable implements Arrayable
      */
     public function unshift(mixed $value): self
     {
-        $this->data = FixedArray::unshift($value, $this->data);
+        $this->data = FixedArray::unshift($this->data, $value);
 
         return $this;
     }

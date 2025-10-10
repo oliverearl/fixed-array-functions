@@ -22,9 +22,9 @@ class FixedArray
      *
      * @return \SplFixedArray<mixed>
      */
-    public static function add(mixed $value, SplFixedArray $fixedArray): SplFixedArray
+    public static function add(SplFixedArray $fixedArray, mixed $value): SplFixedArray
     {
-        return self::push($value, $fixedArray);
+        return self::push($fixedArray, $value);
     }
 
     /**
@@ -35,10 +35,10 @@ class FixedArray
      *
      * @return \SplFixedArray<mixed>
      */
-    public static function addFrom(iterable $items, SplFixedArray $array): SplFixedArray
+    public static function addFrom(SplFixedArray $array, iterable $items): SplFixedArray
     {
         foreach ($items as $value) {
-            self::add($value, $array);
+            self::add($array, $value);
         }
 
         return $array;
@@ -111,7 +111,7 @@ class FixedArray
      *
      * @param \SplFixedArray<mixed> $array
      */
-    public static function contains(mixed $item, SplFixedArray $array, bool $useStrict = true): bool
+    public static function contains(SplFixedArray $array, mixed $item, bool $useStrict = true): bool
     {
         /** @phpstan-ignore-next-line The third parameter can be Boolean, not just true. */
         return in_array($item, self::toArray($array), $useStrict);
@@ -184,7 +184,7 @@ class FixedArray
     public static function fill(SplFixedArray $array, mixed $value): SplFixedArray
     {
         for ($i = 0, $max = self::count($array); $i < $max; $i++) {
-            self::offsetSet($i, $value, $array);
+            self::offsetSet($array, $i, $value);
         }
 
         return $array;
@@ -378,7 +378,7 @@ class FixedArray
     {
         foreach ($sources as $source) {
             foreach ($source as $item) {
-                self::push($item, $target);
+                self::push($target, $item);
             }
         }
 
@@ -432,7 +432,7 @@ class FixedArray
      */
     public static function offsetNull(int $index, SplFixedArray $array): void
     {
-        self::offsetSet($index, null, $array);
+        self::offsetSet($array, $index, null);
     }
 
     /**
@@ -442,7 +442,7 @@ class FixedArray
      *
      * @param \SplFixedArray<mixed> $array
      */
-    public static function offsetSet(int $index, mixed $value, SplFixedArray $array): void
+    public static function offsetSet(SplFixedArray $array, int $index, mixed $value): void
     {
         $array->offsetSet($index, $value);
     }
@@ -461,7 +461,7 @@ class FixedArray
         }
 
         $item = self::offsetGet($count - 1, $array);
-        self::offsetSet($count - 1, null, $array);
+        self::offsetSet($array, $count - 1, null);
 
         return $item;
     }
@@ -474,12 +474,12 @@ class FixedArray
      *
      * @return \SplFixedArray<mixed>
      */
-    public static function push(mixed $value, SplFixedArray $array): SplFixedArray
+    public static function push(SplFixedArray $array, mixed $value): SplFixedArray
     {
         $size = self::count($array);
 
         self::setSize($size + 1, $array);
-        self::offsetSet($size, $value, $array);
+        self::offsetSet($array, $size, $value);
 
         return $array;
     }
@@ -574,7 +574,7 @@ class FixedArray
 
         // Shift all items to the left and nullify the last slot.
         for ($i = 1; $i < $count; $i++) {
-            self::offsetSet($i - 1, self::offsetGet($i, $array), $array);
+            self::offsetSet($array, $i - 1, self::offsetGet($i, $array));
         }
 
         self::offsetNull($count - 1, $array);
@@ -710,7 +710,7 @@ class FixedArray
      *
      * @return \SplFixedArray<mixed>
      */
-    public static function unshift(mixed $value, SplFixedArray $array): SplFixedArray
+    public static function unshift(SplFixedArray $array, mixed $value): SplFixedArray
     {
         $count = self::count($array);
 
@@ -719,10 +719,10 @@ class FixedArray
 
         // Shift all items one slot to the right and insert the new value at index 0.
         for ($i = $count - 1; $i >= 0; $i--) {
-            self::offsetSet($i + 1, self::offsetGet($i, $array), $array);
+            self::offsetSet($array, $i + 1, self::offsetGet($i, $array));
         }
 
-        self::offsetSet(0, $value, $array);
+        self::offsetSet($array, 0, $value);
 
         return $array;
     }
