@@ -31,12 +31,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      # Always install pcov (lightweight coverage driver)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: pcov
+          coverage: none
 
       - name: Setup problem matchers
         run: |
@@ -48,23 +47,8 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
-      - name: List Installed Dependencies
-        run: composer show -D
-
       - name: Execute tests
         run: vendor/bin/pest --ci
-
-      # Only generate & upload full coverage report on stable build
-      - name: Generate Coverage Report
-        if: matrix.stability == 'prefer-stable'
-        run: vendor/bin/pest --coverage-html coverage-report --coverage-clover coverage.xml
-
-      - name: Upload Coverage Artifact
-        if: matrix.stability == 'prefer-stable'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage-report
 
       - name: Check Type Coverage
         if: matrix.stability == 'prefer-stable'
