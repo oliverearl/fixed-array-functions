@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Petrobolos\FixedArray;
+namespace Petrobolos\FixedArray\Providers;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class FixedArrayFunctionsServiceProvider extends PackageServiceProvider
+class FixedArrayServiceProvider extends PackageServiceProvider
 {
     /**
      * Configures the package for usage.

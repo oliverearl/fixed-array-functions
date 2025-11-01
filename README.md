@@ -14,7 +14,7 @@ large sets of data.
 
 ## Requirements
 
-Currently, requires PHP 8.3 or above, and Laravel 11+.
+Currently, requires PHP 8.4 or above, and Laravel 12+.
 
 ## Installation
 
@@ -79,35 +79,51 @@ $everything = FixedArray::merge(
 
 ## Full list of working methods
 
-| Method         | Description                                                                 |                                                       Example |
-|:---------------|:----------------------------------------------------------------------------|--------------------------------------------------------------:|
-| add            | Alias for push.                                                             |                              `FixedArray::add('bacon', $arr)` |
-| addFrom        | Add an array or collection of items to an array.                            |                        `FixedArray::addFrom([1, 2, 3], $arr)` |
-| contains       | Checks whether an item exists in a given array.                             |                   `FixedArray::contains('needle', $haystack)` |
-| count          | Returns the number of items in a given array.                               |                                   `FixedArray::count($array)` |
-| create         | Creates a new fixed array.                                                  |                                      `FixedArray::create(10)` |
-| each           | Apply a callback to each item in the array without modifying the original.  |         `FixedArray::each($array, fn () => var_dump($value))` |
-| filter         | Applies a filter to a given fixed array.                                    | `FixedArray::filter($array, fn ($value) => $value % 2 === 0)` |
-| first          | Returns the first element of the array.                                     |                                   `FixedArray::first($array)` |
-| fromArray      | Creates a new fixed array from a standard array.                            |                            `FixedArray::fromArray([1, 2, 3])` |
-| fromCollection | Creates a new fixed array from an Illuminate collection.                    |               `FixedArray::fromCollection(collect([1, 2, 3])` |
-| getSize        | Alias for count.                                                            |                                 `FixedArray::getSize($array)` |
-| isFixedArray   | Returns whether a given item is a fixed array.                              |                   `FixedArray::isFixedArray($potentialArray)` |
-| last           | Returns the last element in an array.                                       |                                    `FixedArray::last($array)` |
-| map            | Applies a callback to each item in the array and returns it.                |     `FixedArray::map($array, fn ($value) => (string) $value)` |
-| merge          | Merges given arrays, fixed arrays, or collections into a given fixed array. |                 `FixedArray::merge($array, $array2, $array3)` |
-| nullify        | Overwrite all elements in an array with `null`.                             |                                 `FixedArray::nullify($array)` |
-| offsetExists   | Returns whether a given array offset exists.                                |                      `FixedArray::offsetExists(3, $haystack)` |
-| offsetGet      | Retrieves the value at a given array offset.                                |                         `FixedArray::offsetGet(3, $haystack)` |
-| offsetNull     | Replaces the value at a given array offset with `null`.                     |                        `FixedArray::offsetNull(3, $haystack)` |
-| offsetSet      | Replaces the value at a given array offset with a provided value.           |                 `FixedArray::offsetSet(3, $value, $haystack)` |
-| pop            | Pops the latest value from the array.                                       |                                     `FixedArray::pop($array)` |
-| push           | Pushes a given value to the first available space on the array.             |                            `FixedArray::push($value, $array)` |
-| resize         | Alias for setSize.                                                          |                              `FixedArray::resize(10, $array)` |
-| second         | Returns the second value from the array.                                    |                                  `FixedArray::second($array)` |
-| setSize        | Resizes the array to a given size.                                          |                             `FixedArray::setSize(10, $array)` |
-| toArray        | Converts a fixed array into a standard array.                               |                                 `FixedArray::toArray($array)` |
-| toCollection   | Converts a fixed array into an Illuminate collection.                       |                            `FixedArray::toCollection($array)` |
+| Method         | Description                                                         |
+|:---------------|:--------------------------------------------------------------------|
+| add            | Alias for push.                                                     |
+| addFrom        | Add an array or collection of items to a fixed array.               |
+| chunk          | Split a fixed array into chunks of a given size.                    |
+| chunkWhile     | Split a fixed array into chunks while a callback returns true.      |
+| contains       | Check whether an item exists in a fixed array.                      |
+| create         | Create a new fixed array of a given size.                           |
+| dsfargeg       | DSFARGEG                                                            |
+| each           | Apply a callback to each item without modifying the original array. |
+| fill           | Fill the array with a single value.                                 |
+| filter         | Filter the array using a callback.                                  |
+| find           | Return the first element matching a callback.                       |
+| findKey        | Return the key of the first element matching a callback.            |
+| findIndex      | Alias for findKey.                                                  |
+| first          | Return the first element of the array.                              |
+| fluent         | Creates a new fluent interface for chaining methods.                |
+| flatten        | Flatten nested arrays, collections, and fixed arrays.               |
+| fromArray      | Create a fixed array from a standard array.                         |
+| fromCollection | Create a fixed array from an Illuminate collection.                 |
+| getSize        | Return the number of elements in the array.                         |
+| isFixedArray   | Check whether a value is a fixed array.                             |
+| last           | Return the last element of the array.                               |
+| map            | Apply a callback to each item and return a new array.               |
+| merge          | Merge multiple arrays, fixed arrays, or collections.                |
+| nullify        | Replace all elements with null.                                     |
+| offsetExists   | Check if an index exists in the array.                              |
+| offsetGet      | Get the value at a specific index.                                  |
+| offsetNull     | Set a specific index to null.                                       |
+| offsetSet      | Set a value at a specific index.                                    |
+| pop            | Remove and return the last element.                                 |
+| push           | Add a value to the first available space.                           |
+| random         | Return a random element from the array.                             |
+| resize         | Alias for setSize.                                                  |
+| reverse        | Reverse the order of elements.                                      |
+| second         | Return the second element.                                          |
+| setSize        | Resize the array to a given size.                                   |
+| shift          | Remove and return the first element.                                |
+| shuffle        | Shuffle the array in a secure manner.                               |
+| slice          | Return a subset of the array.                                       |
+| sort           | Sort the array optionally using a callback.                         |
+| toArray        | Convert the fixed array into a standard PHP array.                  |
+| toCollection   | Convert the fixed array into an Illuminate collection.              |
+| unique         | Remove duplicate values from the array.                             |
+| unshift        | Prepend one or more values to the array.                            |
 
 ## Testing
 

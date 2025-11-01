@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Petrobolos\FixedArray\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Petrobolos\FixedArray\FixedArrayFunctionsServiceProvider;
+use Petrobolos\FixedArray\Providers\FixedArrayServiceProvider;
 
-class TestCase extends Orchestra
+abstract class TestCase extends Orchestra
 {
     /** @inheritDoc */
     public function getEnvironmentSetUp($app): void
@@ -17,7 +19,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            FixedArrayFunctionsServiceProvider::class,
+            FixedArrayServiceProvider::class,
         ];
     }
 }

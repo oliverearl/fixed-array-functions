@@ -1,4 +1,4 @@
-name: PHPStan
+name: Static Analysis (Larastan)
 
 on:
   push:
@@ -24,5 +24,5 @@ jobs:
       - name: Install composer dependencies
         uses: ramsey/composer-install@v3
 
-      - name: Run PHPStan
+      - name: Run Larastan
         run: ./vendor/bin/phpstan --error-format=github
