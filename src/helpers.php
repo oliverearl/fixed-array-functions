@@ -1,16 +1,15 @@
 <?php
 
-use Petrobolos\FixedArray\FixedArrayable;
+declare(strict_types=1);
+
+use Petrobolos\FixedArray\Fluent\FixedArrayable;
 
 if (! function_exists('fixedArray')) {
     /**
-     * Create a new fixed array fluent interface.
-     *
-     * @param mixed|null $input
-     * @return \Petrobolos\FixedArray\FixedArrayable
+     * Create a new FixedArrayable instance.
      */
-    function fixedArray(mixed $input = null): FixedArrayable
+    function fixedArray(mixed $value): FixedArrayable
     {
-        return new FixedArrayable($input);
+        return FixedArrayable::make($value);
     }
 }

@@ -1,4 +1,4 @@
-name: run-tests
+name: Automated Testing (Pest)
 
 on:
   push:
@@ -17,14 +17,12 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.4, 8.3]
-        laravel: [12.*, 11.*]
-        stability: [prefer-lowest, prefer-stable]
+        php: [8.4, 8.5]
+        laravel: [12.*]
+        stability: [prefer-stable]
         include:
           - laravel: 12.*
             testbench: 10.*
-          - laravel: 11.*
-            testbench: 9.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -54,3 +52,11 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/pest --ci
+
+      - name: Check Type Coverage
+        if: matrix.stability == 'prefer-stable'
+        run: vendor/bin/pest --type-coverage=100
+
+      - name: Check Profanity
+        if: matrix.stability == 'prefer-stable'
+        run: vendor/bin/pest --profanity
