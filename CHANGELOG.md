@@ -2,6 +2,19 @@
 
 All notable changes to `fixed-array-functions` will be documented in this file.
 
+## v3.0.0 - 2025-12-09
+
+### What's Changed
+
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/oliverearl/fixed-array-functions/pull/27
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/oliverearl/fixed-array-functions/pull/28
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/oliverearl/fixed-array-functions/pull/29
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/oliverearl/fixed-array-functions/pull/31
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/oliverearl/fixed-array-functions/pull/32
+* Version 3.0.0 by @oliverearl in https://github.com/oliverearl/fixed-array-functions/pull/30
+
+**Full Changelog**: https://github.com/oliverearl/fixed-array-functions/compare/v2.1.2...v3.0.0
+
 ## v2.1.2 - 2025-05-13
 
 ### What's Changed
