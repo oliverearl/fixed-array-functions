@@ -12,7 +12,7 @@ abstract class TestCase extends Orchestra
     /** @inheritDoc */
     public function getEnvironmentSetUp($app): void
     {
-        config()->set('database.default', 'testing');
+        $app['config']->set('database.default', 'testing');
     }
 
     /** @inheritDoc */
