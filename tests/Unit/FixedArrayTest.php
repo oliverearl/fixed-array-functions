@@ -1422,3 +1422,413 @@ describe('unshift', function (): void {
         expect($array->toArray())->toEqual(['start', true, false]);
     });
 });
+
+describe('isEmpty', function (): void {
+    it('returns true for an empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::isEmpty($array))->toBeTrue();
+    });
+
+    it('returns false for a non-empty array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        expect(FixedArray::isEmpty($array))->toBeFalse();
+    });
+});
+
+describe('isNotEmpty', function (): void {
+    it('returns false for an empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::isNotEmpty($array))->toBeFalse();
+    });
+
+    it('returns true for a non-empty array', function (): void {
+        $array = FixedArray::fromArray([1]);
+        expect(FixedArray::isNotEmpty($array))->toBeTrue();
+    });
+});
+
+describe('reduce', function (): void {
+    it('reduces an array to a single value', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        $result = FixedArray::reduce($array, fn(int $carry, int $value): int => $carry + $value, 0);
+
+        expect($result)->toBe(10);
+    });
+
+    it('uses null as default initial value', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+        $result = FixedArray::reduce($array, fn(?string $carry, string $value): string => ($carry ?? '') . $value);
+
+        expect($result)->toBe('abc');
+    });
+
+    it('passes key to callback', function (): void {
+        $array = FixedArray::fromArray([10, 20, 30]);
+        $result = FixedArray::reduce(
+            $array,
+            fn(int $carry, int $value, int $key): int => $carry + $key,
+            0,
+        );
+
+        expect($result)->toBe(3); // 0 + 1 + 2
+    });
+});
+
+describe('sum', function (): void {
+    it('sums numeric values', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        expect(FixedArray::sum($array))->toBe(10);
+    });
+
+    it('ignores non-numeric values', function (): void {
+        $array = FixedArray::fromArray([1, 'foo', 2, null, 3]);
+        expect(FixedArray::sum($array))->toBe(6);
+    });
+
+    it('sums using a callback', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['value' => 10],
+            (object) ['value' => 20],
+        ]);
+        $result = FixedArray::sum($array, fn(object $item): int => $item->value);
+
+        expect($result)->toBe(30);
+    });
+
+    it('sums using a property name', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['price' => 10],
+            (object) ['price' => 20],
+        ]);
+        expect(FixedArray::sum($array, 'price'))->toBe(30);
+    });
+
+    it('returns 0 for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::sum($array))->toBe(0);
+    });
+});
+
+describe('avg', function (): void {
+    it('calculates the average', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        expect(FixedArray::avg($array))->toBe(2.5);
+    });
+
+    it('returns null for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::avg($array))->toBeNull();
+    });
+
+    it('works with callback', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['score' => 80],
+            (object) ['score' => 90],
+        ]);
+        expect(FixedArray::avg($array, 'score'))->toBe(85);
+    });
+});
+
+describe('average', function (): void {
+    it('is an alias for avg', function (): void {
+        $array = FixedArray::fromArray([10, 20, 30]);
+        expect(FixedArray::average($array))->toBe(20);
+    });
+});
+
+describe('min', function (): void {
+    it('finds the minimum value', function (): void {
+        $array = FixedArray::fromArray([3, 1, 4, 1, 5]);
+        expect(FixedArray::min($array))->toBe(1);
+    });
+
+    it('returns null for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::min($array))->toBeNull();
+    });
+
+    it('works with callback', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['age' => 25],
+            (object) ['age' => 30],
+            (object) ['age' => 20],
+        ]);
+        expect(FixedArray::min($array, 'age'))->toBe(20);
+    });
+});
+
+describe('max', function (): void {
+    it('finds the maximum value', function (): void {
+        $array = FixedArray::fromArray([3, 1, 4, 1, 5]);
+        expect(FixedArray::max($array))->toBe(5);
+    });
+
+    it('returns null for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::max($array))->toBeNull();
+    });
+
+    it('works with property name', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['count' => 100],
+            (object) ['count' => 200],
+        ]);
+        expect(FixedArray::max($array, 'count'))->toBe(200);
+    });
+});
+
+describe('every', function (): void {
+    it('returns true when all items pass', function (): void {
+        $array = FixedArray::fromArray([2, 4, 6]);
+        $result = FixedArray::every($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result)->toBeTrue();
+    });
+
+    it('returns false when any item fails', function (): void {
+        $array = FixedArray::fromArray([2, 3, 4]);
+        $result = FixedArray::every($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result)->toBeFalse();
+    });
+
+    it('returns true for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::every($array, fn(): true => true))->toBeTrue();
+    });
+});
+
+describe('all', function (): void {
+    it('is an alias for every', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        expect(FixedArray::all($array, fn(int $v): bool => $v > 0))->toBeTrue();
+    });
+});
+
+describe('some', function (): void {
+    it('returns true when at least one item passes', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        expect(FixedArray::some($array, fn(int $v): bool => $v === 2))->toBeTrue();
+    });
+
+    it('returns false when no items pass', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        expect(FixedArray::some($array, fn(int $v): bool => $v > 10))->toBeFalse();
+    });
+
+    it('returns false for empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::some($array, fn(): true => true))->toBeFalse();
+    });
+});
+
+describe('reject', function (): void {
+    it('filters out items that pass the test', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4]);
+        $result = FixedArray::reject($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result->toArray())->toEqual([1, 3]);
+    });
+
+    it('returns all items when none pass', function (): void {
+        $array = FixedArray::fromArray([1, 3, 5]);
+        $result = FixedArray::reject($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result->toArray())->toEqual([1, 3, 5]);
+    });
+});
+
+describe('partition', function (): void {
+    it('splits array into two groups', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3, 4, 5]);
+        $result = FixedArray::partition($array, fn(int $v): bool => $v % 2 === 0);
+
+        expect($result->count())->toBe(2)
+            ->and(FixedArray::toArray($result[0]))->toEqual([2, 4])
+            ->and(FixedArray::toArray($result[1]))->toEqual([1, 3, 5]);
+    });
+
+    it('handles empty array', function (): void {
+        $array = FixedArray::create(0);
+        $result = FixedArray::partition($array, fn(): true => true);
+
+        expect($result->count())->toBe(2)
+            ->and(FixedArray::toArray($result[0]))->toEqual([])
+            ->and(FixedArray::toArray($result[1]))->toEqual([]);
+    });
+});
+
+describe('pluck', function (): void {
+    it('extracts values from array items', function (): void {
+        $array = FixedArray::fromArray([
+            ['name' => 'Alice'],
+            ['name' => 'Bob'],
+        ]);
+        $result = FixedArray::pluck($array, 'name');
+
+        expect($result->toArray())->toEqual(['Alice', 'Bob']);
+    });
+
+    it('extracts from objects', function (): void {
+        $array = FixedArray::fromArray([
+            (object) ['id' => 1],
+            (object) ['id' => 2],
+        ]);
+        $result = FixedArray::pluck($array, 'id');
+
+        expect($result->toArray())->toEqual([1, 2]);
+    });
+
+    it('returns null for missing keys', function (): void {
+        $array = FixedArray::fromArray([
+            ['name' => 'Alice'],
+            ['other' => 'value'],
+        ]);
+        $result = FixedArray::pluck($array, 'name');
+
+        expect($result->toArray())->toEqual(['Alice', null]);
+    });
+});
+
+describe('join', function (): void {
+    it('joins array elements with a string', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+        expect(FixedArray::join($array, '-'))->toBe('a-b-c');
+    });
+
+    it('works without glue', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        expect(FixedArray::join($array))->toBe('123');
+    });
+
+    it('handles empty array', function (): void {
+        $array = FixedArray::create(0);
+        expect(FixedArray::join($array, ','))->toBe('');
+    });
+});
+
+describe('implode', function (): void {
+    it('is an alias for join', function (): void {
+        $array = FixedArray::fromArray(['x', 'y', 'z']);
+        expect(FixedArray::implode($array, '|'))->toBe('x|y|z');
+    });
+});
+
+describe('keys', function (): void {
+    it('returns all keys from the array', function (): void {
+        $array = FixedArray::fromArray(['a', 'b', 'c']);
+        $keys = FixedArray::keys($array);
+
+        expect($keys->toArray())->toEqual([0, 1, 2]);
+    });
+
+    it('handles empty array', function (): void {
+        $array = FixedArray::create(0);
+        $keys = FixedArray::keys($array);
+
+        expect($keys->toArray())->toEqual([]);
+    });
+});
+
+describe('values', function (): void {
+    it('returns all values reindexed', function (): void {
+        $array = FixedArray::fromArray([10, 20, 30]);
+        $values = FixedArray::values($array);
+
+        expect($values->toArray())->toEqual([10, 20, 30]);
+    });
+});
+
+describe('tap', function (): void {
+    it('passes array to callback and returns array', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $sideEffect = null;
+
+        $result = FixedArray::tap($array, function (SplFixedArray $arr) use (&$sideEffect): void {
+            $sideEffect = $arr->count();
+        });
+
+        expect($result)->toBe($array)
+            ->and($sideEffect)->toBe(3);
+    });
+});
+
+describe('pipe', function (): void {
+    it('passes array through callback and returns result', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $result = FixedArray::pipe($array, fn(SplFixedArray $arr): int => $arr->count());
+
+        expect($result)->toBe(3);
+    });
+});
+
+describe('when', function (): void {
+    it('executes callback when condition is true', function (): void {
+        $array = FixedArray::fromArray([1, 2]);
+        $result = FixedArray::when(
+            $array,
+            true,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 3),
+        );
+
+        expect($result->toArray())->toEqual([1, 2, 3]);
+    });
+
+    it('does not execute callback when condition is false', function (): void {
+        $array = FixedArray::fromArray([1, 2]);
+        $result = FixedArray::when(
+            $array,
+            false,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 3),
+        );
+
+        expect($result->toArray())->toEqual([1, 2]);
+    });
+
+    it('executes default when condition is false', function (): void {
+        $array = FixedArray::fromArray([1]);
+        $result = FixedArray::when(
+            $array,
+            false,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 2),
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 99),
+        );
+
+        expect($result->toArray())->toEqual([1, 99]);
+    });
+
+    it('supports callable condition', function (): void {
+        $array = FixedArray::fromArray([1, 2, 3]);
+        $result = FixedArray::when(
+            $array,
+            fn(SplFixedArray $arr): bool => $arr->count() > 2,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 4),
+        );
+
+        expect($result->toArray())->toEqual([1, 2, 3, 4]);
+    });
+});
+
+describe('unless', function (): void {
+    it('executes callback when condition is false', function (): void {
+        $array = FixedArray::fromArray([1]);
+        $result = FixedArray::unless(
+            $array,
+            false,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 2),
+        );
+
+        expect($result->toArray())->toEqual([1, 2]);
+    });
+
+    it('does not execute callback when condition is true', function (): void {
+        $array = FixedArray::fromArray([1]);
+        $result = FixedArray::unless(
+            $array,
+            true,
+            fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 2),
+        );
+
+        expect($result->toArray())->toEqual([1]);
+    });
+});
