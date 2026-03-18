@@ -441,4 +441,254 @@ class FixedArrayable
 
         return $this;
     }
+
+    /**
+     * Determine if the fixed array is empty.
+     */
+    public function isEmpty(): bool
+    {
+        return FixedArray::isEmpty($this->data);
+    }
+
+    /**
+     * Determine if the fixed array is not empty.
+     */
+    public function isNotEmpty(): bool
+    {
+        return FixedArray::isNotEmpty($this->data);
+    }
+
+    /**
+     * Reduce the fixed array to a single value.
+     *
+     * @param callable(mixed $carry, mixed $value, int $key): mixed $callback
+     */
+    public function reduce(callable $callback, mixed $initial = null): mixed
+    {
+        return FixedArray::reduce($this->data, $callback, $initial);
+    }
+
+    /**
+     * Sum all numeric values in the fixed array.
+     *
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public function sum(callable|string|null $callback = null): int|float
+    {
+        return FixedArray::sum($this->data, $callback);
+    }
+
+    /**
+     * Calculate the average of all numeric values.
+     *
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public function avg(callable|string|null $callback = null): int|float|null
+    {
+        return FixedArray::avg($this->data, $callback);
+    }
+
+    /**
+     * Alias for avg.
+     *
+     * @see \Petrobolos\FixedArray\Fluent\FixedArrayable::avg()
+     *
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public function average(callable|string|null $callback = null): int|float|null
+    {
+        return $this->avg($callback);
+    }
+
+    /**
+     * Find the minimum value in the fixed array.
+     *
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public function min(callable|string|null $callback = null): mixed
+    {
+        return FixedArray::min($this->data, $callback);
+    }
+
+    /**
+     * Find the maximum value in the fixed array.
+     *
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public function max(callable|string|null $callback = null): mixed
+    {
+        return FixedArray::max($this->data, $callback);
+    }
+
+    /**
+     * Determine if all items pass the given test.
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function every(callable $callback): bool
+    {
+        return FixedArray::every($this->data, $callback);
+    }
+
+    /**
+     * Alias for every.
+     *
+     * @see \Petrobolos\FixedArray\Fluent\FixedArrayable::every()
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function all(callable $callback): bool
+    {
+        return $this->every($callback);
+    }
+
+    /**
+     * Determine if at least one item passes the given test.
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function some(callable $callback): bool
+    {
+        return FixedArray::some($this->data, $callback);
+    }
+
+    /**
+     * Filter out items that pass the given test.
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function reject(callable $callback): self
+    {
+        $this->data = FixedArray::reject($this->data, $callback);
+
+        return $this;
+    }
+
+    /**
+     * Partition the array into two arrays based on a callback.
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function partition(callable $callback): self
+    {
+        $this->data = FixedArray::partition($this->data, $callback);
+
+        return $this;
+    }
+
+    /**
+     * Extract values from a specific property or key.
+     */
+    public function pluck(string $key): self
+    {
+        $this->data = FixedArray::pluck($this->data, $key);
+
+        return $this;
+    }
+
+    /**
+     * Join array elements with a string.
+     */
+    public function join(string $glue = ''): string
+    {
+        return FixedArray::join($this->data, $glue);
+    }
+
+    /**
+     * Alias for join.
+     *
+     * @see \Petrobolos\FixedArray\Fluent\FixedArrayable::join()
+     */
+    public function implode(string $glue = ''): string
+    {
+        return $this->join($glue);
+    }
+
+    /**
+     * Get all keys from the fixed array.
+     */
+    public function keys(): self
+    {
+        $this->data = FixedArray::keys($this->data);
+
+        return $this;
+    }
+
+    /**
+     * Get all values from the fixed array (reindexed).
+     */
+    public function values(): self
+    {
+        $this->data = FixedArray::values($this->data);
+
+        return $this;
+    }
+
+    /**
+     * Pass the array to a callback and return the array.
+     *
+     * @param callable(\SplFixedArray<mixed> $array): void $callback
+     */
+    public function tap(callable $callback): self
+    {
+        FixedArray::tap($this->data, $callback);
+
+        return $this;
+    }
+
+    /**
+     * Pass the array through a callback and return the result.
+     *
+     * @param callable(\SplFixedArray<mixed> $array): mixed $callback
+     */
+    public function pipe(callable $callback): mixed
+    {
+        return FixedArray::pipe($this->data, $callback);
+    }
+
+    /**
+     * Apply the callback if the condition is true.
+     *
+     * @param callable(\SplFixedArray<mixed> $array): bool|bool $condition
+     * @param callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed> $callback
+     * @param (callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed>)|null $default
+     */
+    public function when(
+        callable|bool $condition,
+        callable $callback,
+        ?callable $default = null,
+    ): self {
+        $this->data = FixedArray::when($this->data, $condition, $callback, $default);
+
+        return $this;
+    }
+
+    /**
+     * Apply the callback if the condition is false.
+     *
+     * @param callable(\SplFixedArray<mixed> $array): bool|bool $condition
+     * @param callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed> $callback
+     * @param (callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed>)|null $default
+     */
+    public function unless(
+        callable|bool $condition,
+        callable $callback,
+        ?callable $default = null,
+    ): self {
+        $this->data = FixedArray::unless($this->data, $condition, $callback, $default);
+
+        return $this;
+    }
+
+    /**
+     * Filter the fixed array using a callback.
+     *
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public function filter(callable $callback): self
+    {
+        $this->data = FixedArray::filter($this->data, $callback);
+
+        return $this;
+    }
 }

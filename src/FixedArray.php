@@ -188,16 +188,21 @@ class FixedArray
      * Apply a filter to a given fixed array.
      *
      * @param \SplFixedArray<mixed> $array
-     * @param callable(mixed $value): bool $callback
+     * @param callable(mixed $value, int $key): bool $callback
      *
      * @return \SplFixedArray<mixed>
      */
     public static function filter(SplFixedArray $array, callable $callback): SplFixedArray
     {
-        $result = array_filter(self::toArray($array), $callback);
+        $result = [];
 
-        // Reindex to avoid null-filled gaps caused by preserved keys.
-        return self::fromArray(array_values($result), false);
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                $result[] = $value;
+            }
+        }
+
+        return self::fromArray($result, false);
     }
 
     /**
@@ -717,6 +722,487 @@ class FixedArray
         }
 
         self::offsetSet($array, 0, $value);
+
+        return $array;
+    }
+
+    /**
+     * Returns whether the array is empty.
+     *
+     * @param \SplFixedArray<mixed> $array
+     */
+    public static function isEmpty(SplFixedArray $array): bool
+    {
+        return self::count($array) === 0;
+    }
+
+    /**
+     * Returns whether the array is not empty.
+     *
+     * @param \SplFixedArray<mixed> $array
+     */
+    public static function isNotEmpty(SplFixedArray $array): bool
+    {
+        return ! self::isEmpty($array);
+    }
+
+    /**
+     * Reduce the array to a single value using a callback.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $carry, mixed $value, int $key): mixed $callback
+     */
+    public static function reduce(SplFixedArray $array, callable $callback, mixed $initial = null): mixed
+    {
+        $carry = $initial;
+
+        foreach ($array as $key => $value) {
+            $carry = $callback($carry, $value, $key);
+        }
+
+        return $carry;
+    }
+
+    /**
+     * Sum all numeric values in the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public static function sum(SplFixedArray $array, callable|string|null $callback = null): int|float
+    {
+        if ($callback === null) {
+            $sum = 0;
+            foreach ($array as $value) {
+                if (is_numeric($value)) {
+                    $sum += $value;
+                }
+            }
+
+            return $sum;
+        }
+
+        if (is_string($callback)) {
+            // Support property access like Collection
+            $sum = 0;
+            foreach ($array as $value) {
+                if (is_object($value) && property_exists($value, $callback)) {
+                    /** @phpstan-ignore-next-line property.dynamicName */
+                    $val = $value->{$callback};
+                    if (is_numeric($val)) {
+                        $sum += $val;
+                    }
+                }
+            }
+
+            return $sum;
+        }
+
+        $sum = 0;
+        foreach ($array as $value) {
+            $result = $callback($value);
+            /** @phpstan-ignore-next-line function.alreadyNarrowedType */
+            if (is_numeric($result)) {
+                $sum += $result;
+            }
+        }
+
+        return $sum;
+    }
+
+    /**
+     * Calculate the average of all numeric values in the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public static function avg(SplFixedArray $array, callable|string|null $callback = null): int|float|null
+    {
+        $count = self::count($array);
+
+        if ($count === 0) {
+            return null;
+        }
+
+        return self::sum($array, $callback) / $count;
+    }
+
+    /**
+     * Alias for avg.
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::avg()
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public static function average(SplFixedArray $array, callable|string|null $callback = null): int|float|null
+    {
+        return self::avg($array, $callback);
+    }
+
+    /**
+     * Find the minimum value in the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public static function min(SplFixedArray $array, callable|string|null $callback = null): mixed
+    {
+        if (self::isEmpty($array)) {
+            return null;
+        }
+
+        if ($callback === null) {
+            $min = null;
+            foreach ($array as $value) {
+                if ($min === null || $value < $min) {
+                    $min = $value;
+                }
+            }
+
+            return $min;
+        }
+
+        if (is_string($callback)) {
+            $min = null;
+            foreach ($array as $value) {
+                if (is_object($value) && property_exists($value, $callback)) {
+                    /** @phpstan-ignore-next-line property.dynamicName */
+                    $val = $value->{$callback};
+                    if ($min === null || $val < $min) {
+                        $min = $val;
+                    }
+                }
+            }
+
+            return $min;
+        }
+
+        $min = null;
+        foreach ($array as $value) {
+            $result = $callback($value);
+            if ($min === null || $result < $min) {
+                $min = $result;
+            }
+        }
+
+        return $min;
+    }
+
+    /**
+     * Find the maximum value in the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param (callable(mixed $value): (int|float))|string|null $callback
+     */
+    public static function max(SplFixedArray $array, callable|string|null $callback = null): mixed
+    {
+        if (self::isEmpty($array)) {
+            return null;
+        }
+
+        if ($callback === null) {
+            $max = null;
+            foreach ($array as $value) {
+                if ($max === null || $value > $max) {
+                    $max = $value;
+                }
+            }
+
+            return $max;
+        }
+
+        if (is_string($callback)) {
+            $max = null;
+            foreach ($array as $value) {
+                if (is_object($value) && property_exists($value, $callback)) {
+                    /** @phpstan-ignore-next-line property.dynamicName */
+                    $val = $value->{$callback};
+                    if ($max === null || $val > $max) {
+                        $max = $val;
+                    }
+                }
+            }
+
+            return $max;
+        }
+
+        $max = null;
+        foreach ($array as $value) {
+            $result = $callback($value);
+            if ($max === null || $result > $max) {
+                $max = $result;
+            }
+        }
+
+        return $max;
+    }
+
+    /**
+     * Determine if all items pass the given test.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function every(SplFixedArray $array, callable $callback): bool
+    {
+        foreach ($array as $key => $value) {
+            if (! $callback($value, $key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Alias for every.
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::every()
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function all(SplFixedArray $array, callable $callback): bool
+    {
+        return self::every($array, $callback);
+    }
+
+    /**
+     * Determine if at least one item passes the given test.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     */
+    public static function some(SplFixedArray $array, callable $callback): bool
+    {
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Filter out items that pass the given test (opposite of filter).
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function reject(SplFixedArray $array, callable $callback): SplFixedArray
+    {
+        return self::filter($array, static fn(mixed $value, int $key): bool => ! $callback($value, $key));
+    }
+
+    /**
+     * Partition the array into two arrays based on a callback.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(mixed $value, int $key): bool $callback
+     *
+     * @return \SplFixedArray<mixed> Array containing two SplFixedArrays: [passing, failing]
+     */
+    public static function partition(SplFixedArray $array, callable $callback): SplFixedArray
+    {
+        $passing = [];
+        $failing = [];
+
+        foreach ($array as $key => $value) {
+            if ($callback($value, $key)) {
+                $passing[] = $value;
+            } else {
+                $failing[] = $value;
+            }
+        }
+
+        return self::fromArray([
+            self::fromArray($passing, false),
+            self::fromArray($failing, false),
+        ], false);
+    }
+
+    /**
+     * Extract values from a specific property or key.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function pluck(SplFixedArray $array, string $key): SplFixedArray
+    {
+        $result = [];
+
+        foreach ($array as $item) {
+            if (is_array($item) && array_key_exists($key, $item)) {
+                $result[] = $item[$key];
+            } elseif (is_object($item) && property_exists($item, $key)) {
+                /** @phpstan-ignore-next-line property.dynamicName */
+                $result[] = $item->{$key};
+            } else {
+                $result[] = null;
+            }
+        }
+
+        return self::fromArray($result, false);
+    }
+
+    /**
+     * Join array elements with a string.
+     *
+     * @param \SplFixedArray<mixed> $array
+     */
+    public static function join(SplFixedArray $array, string $glue = ''): string
+    {
+        $result = '';
+        $count = self::count($array);
+
+        foreach ($array as $index => $value) {
+            if ($value === null) {
+                $result .= '';
+            } elseif (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
+                $result .= (string) $value;
+            } else {
+                $result .= '';
+            }
+
+            if ($index < $count - 1) {
+                $result .= $glue;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Alias for join.
+     *
+     * @see \Petrobolos\FixedArray\FixedArray::join()
+     *
+     * @param \SplFixedArray<mixed> $array
+     */
+    public static function implode(SplFixedArray $array, string $glue = ''): string
+    {
+        return self::join($array, $glue);
+    }
+
+    /**
+     * Get all keys (indices) from the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function keys(SplFixedArray $array): SplFixedArray
+    {
+        $keys = [];
+        foreach ($array as $key => $value) {
+            $keys[] = $key;
+        }
+
+        return self::fromArray($keys, false);
+    }
+
+    /**
+     * Get all values from the array (reindexed from 0).
+     *
+     * @param \SplFixedArray<mixed> $array
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function values(SplFixedArray $array): SplFixedArray
+    {
+        $values = [];
+        foreach ($array as $value) {
+            $values[] = $value;
+        }
+
+        return self::fromArray($values, false);
+    }
+
+    /**
+     * Pass the array to a callback and return the array.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(\SplFixedArray<mixed> $array): void $callback
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function tap(SplFixedArray $array, callable $callback): SplFixedArray
+    {
+        $callback($array);
+
+        return $array;
+    }
+
+    /**
+     * Pass the array through a callback and return the result.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(\SplFixedArray<mixed> $array): mixed $callback
+     */
+    public static function pipe(SplFixedArray $array, callable $callback): mixed
+    {
+        return $callback($array);
+    }
+
+    /**
+     * Apply the callback if the condition is true.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(\SplFixedArray<mixed> $array): bool|bool $condition
+     * @param callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed> $callback
+     * @param (callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed>)|null $default
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function when(
+        SplFixedArray $array,
+        callable|bool $condition,
+        callable $callback,
+        ?callable $default = null,
+    ): SplFixedArray {
+        $conditionResult = is_callable($condition) ? $condition($array) : $condition;
+
+        if ($conditionResult) {
+            return $callback($array);
+        }
+
+        if ($default !== null) {
+            return $default($array);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Apply the callback if the condition is false.
+     *
+     * @param \SplFixedArray<mixed> $array
+     * @param callable(\SplFixedArray<mixed> $array): bool|bool $condition
+     * @param callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed> $callback
+     * @param (callable(\SplFixedArray<mixed> $array): \SplFixedArray<mixed>)|null $default
+     *
+     * @return \SplFixedArray<mixed>
+     */
+    public static function unless(
+        SplFixedArray $array,
+        callable|bool $condition,
+        callable $callback,
+        ?callable $default = null,
+    ): SplFixedArray {
+        $conditionResult = is_callable($condition) ? $condition($array) : $condition;
+
+        if (! $conditionResult) {
+            return $callback($array);
+        }
+
+        if ($default !== null) {
+            return $default($array);
+        }
 
         return $array;
     }

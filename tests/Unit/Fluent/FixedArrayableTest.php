@@ -447,4 +447,179 @@ describe('fluency', function (): void {
             expect($sorted->toArray())->toEqual([1, 2, 3]);
         });
     });
+
+    describe('isEmpty', function (): void {
+        it('returns true for empty array', function (): void {
+            $empty = FixedArrayable::make([]);
+            expect($empty->isEmpty())->toBeTrue();
+        });
+
+        it('returns false for non-empty array', function (): void {
+            expect($this->fluent->isEmpty())->toBeFalse();
+        });
+    });
+
+    describe('isNotEmpty', function (): void {
+        it('returns false for empty array', function (): void {
+            $empty = FixedArrayable::make([]);
+            expect($empty->isNotEmpty())->toBeFalse();
+        });
+
+        it('returns true for non-empty array', function (): void {
+            expect($this->fluent->isNotEmpty())->toBeTrue();
+        });
+    });
+
+    describe('reduce', function (): void {
+        it('reduces to a single value', function (): void {
+            $result = $this->fluent->reduce(fn(int $carry, int $v): int => $carry + $v, 0);
+            expect($result)->toBe(15); // 1+2+3+4+5
+        });
+    });
+
+    describe('sum', function (): void {
+        it('sums numeric values', function (): void {
+            expect($this->fluent->sum())->toBe(15);
+        });
+    });
+
+    describe('avg', function (): void {
+        it('calculates average', function (): void {
+            expect($this->fluent->avg())->toBe(3); // (1+2+3+4+5)/5
+        });
+    });
+
+    describe('average', function (): void {
+        it('is alias for avg', function (): void {
+            expect($this->fluent->average())->toBe(3);
+        });
+    });
+
+    describe('min', function (): void {
+        it('finds minimum value', function (): void {
+            expect($this->fluent->min())->toBe(1);
+        });
+    });
+
+    describe('max', function (): void {
+        it('finds maximum value', function (): void {
+            expect($this->fluent->max())->toBe(5);
+        });
+    });
+
+    describe('every', function (): void {
+        it('checks if all items pass test', function (): void {
+            expect($this->fluent->every(fn(int $v): bool => $v > 0))->toBeTrue();
+            expect($this->fluent->every(fn(int $v): bool => $v > 3))->toBeFalse();
+        });
+    });
+
+    describe('all', function (): void {
+        it('is alias for every', function (): void {
+            expect($this->fluent->all(fn(int $v): bool => $v < 10))->toBeTrue();
+        });
+    });
+
+    describe('some', function (): void {
+        it('checks if any item passes test', function (): void {
+            expect($this->fluent->some(fn(int $v): bool => $v === 3))->toBeTrue();
+            expect($this->fluent->some(fn(int $v): bool => $v > 100))->toBeFalse();
+        });
+    });
+
+    describe('reject', function (): void {
+        it('filters out items that pass test', function (): void {
+            $result = $this->fluent->reject(fn(int $v): bool => $v % 2 === 0);
+            expect($result->toArray())->toEqual([1, 3, 5]);
+        });
+    });
+
+    describe('partition', function (): void {
+        it('splits into two groups', function (): void {
+            $partitioned = $this->fluent->partition(fn(int $v): bool => $v % 2 === 0);
+            $arrays = $partitioned->toArray();
+
+            expect($arrays)->toHaveCount(2)
+                ->and($arrays[0]->toArray())->toEqual([2, 4])
+                ->and($arrays[1]->toArray())->toEqual([1, 3, 5]);
+        });
+    });
+
+    describe('pluck', function (): void {
+        it('extracts values by key', function (): void {
+            $data = FixedArrayable::make([
+                ['name' => 'Alice', 'age' => 25],
+                ['name' => 'Bob', 'age' => 30],
+            ]);
+            $names = $data->pluck('name');
+
+            expect($names->toArray())->toEqual(['Alice', 'Bob']);
+        });
+    });
+
+    describe('join', function (): void {
+        it('joins elements with glue', function (): void {
+            $result = $this->fluent->join('-');
+            expect($result)->toBe('1-2-3-4-5');
+        });
+    });
+
+    describe('implode', function (): void {
+        it('is alias for join', function (): void {
+            expect($this->fluent->implode(','))->toBe('1,2,3,4,5');
+        });
+    });
+
+    describe('keys', function (): void {
+        it('returns array keys', function (): void {
+            $keys = $this->fluent->keys();
+            expect($keys->toArray())->toEqual([0, 1, 2, 3, 4]);
+        });
+    });
+
+    describe('values', function (): void {
+        it('returns array values', function (): void {
+            $values = $this->fluent->values();
+            expect($values->toArray())->toEqual([1, 2, 3, 4, 5]);
+        });
+    });
+
+    describe('tap', function (): void {
+        it('executes callback and returns self', function (): void {
+            $sideEffect = null;
+            $result = $this->fluent->tap(function (SplFixedArray $arr) use (&$sideEffect): void {
+                $sideEffect = $arr->count();
+            });
+
+            expect($result)->toBe($this->fluent)
+                ->and($sideEffect)->toBe(5);
+        });
+    });
+
+    describe('pipe', function (): void {
+        it('passes through callback', function (): void {
+            $result = $this->fluent->pipe(fn(SplFixedArray $arr): int => $arr->count());
+            expect($result)->toBe(5);
+        });
+    });
+
+    describe('when', function (): void {
+        it('executes callback when condition is true', function (): void {
+            $result = $this->fluent->when(
+                true,
+                fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 6),
+            );
+            expect($result->toArray())->toEqual([1, 2, 3, 4, 5, 6]);
+        });
+    });
+
+    describe('unless', function (): void {
+        it('executes callback when condition is false', function (): void {
+            $result = $this->fluent->unless(
+                false,
+                fn(SplFixedArray $arr): SplFixedArray => FixedArray::push($arr, 6),
+            );
+            expect($result->toArray())->toEqual([1, 2, 3, 4, 5, 6]);
+        });
+    });
 });
