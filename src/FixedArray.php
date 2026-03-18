@@ -669,27 +669,27 @@ class FixedArray
     public static function unique(SplFixedArray $array, bool $strict = true): SplFixedArray
     {
         $values = self::toArray($array);
+        $unique = [];
 
-        if ($strict) {
-            $unique = [];
+        foreach ($values as $v) {
+            $found = false;
 
-            foreach ($values as $v) {
-                $found = false;
+            foreach ($unique as $u) {
+                if ($v === $u) {
+                    $found = true;
 
-                foreach ($unique as $u) {
-                    if ($v === $u) {
-                        $found = true;
-
-                        break;
-                    }
-                }
-
-                if (!$found) {
-                    $unique[] = $v;
+                    break;
                 }
             }
-        } else {
-            $unique = array_unique($values);
+
+            if (!$found) {
+                $unique[] = $v;
+            }
+        }
+
+        if (!$strict) {
+            /** @var array<int, mixed> $unique */
+            $unique = array_values(array_unique($unique, SORT_REGULAR));
         }
 
         return self::fromArray($unique, false);
